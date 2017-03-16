@@ -240,8 +240,8 @@ public class AppleIconView: UIView {
   }
 }
 
-let appleRatio : CGFloat = 1289.0 / 1102.0
-let appleIconView = AppleIconView(frame: CGRect.init(x: 0, y: 0, width: (265.0 / 1156.0) * view.frame.height, height: (appleRatio * 265.0 / 1156.0) * view.frame.height))
+let appleRatio : CGFloat =  1102.0 / 1289.0
+let appleIconView = AppleIconView(frame: CGRect.init(x: 0, y: 0, width: (appleRatio * 325.0 / 2208.0) * view.frame.height, height: (325.0 / 2208.0) * view.frame.height))
 
 let combinePath = UIBezierPath()
 combinePath.append(appleIconView.leafPath)
@@ -249,13 +249,12 @@ combinePath.append(appleIconView.applePath)
 
 let shapeLayerMask = CAShapeLayer()
 shapeLayerMask.path = combinePath.cgPath
-shapeLayerMask.backgroundColor = UIColor(colorLiteralRed: 40/255, green: 43/255, blue: 53/255, alpha: 1).cgColor
+shapeLayerMask.backgroundColor = red.cgColor
 appleIconView.layer.mask = shapeLayerMask
 
 
-let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: 2600, height: 1400))
-backgroundView.backgroundColor = UIColor(colorLiteralRed: 40/255, green: 43/255, blue: 53/255, alpha: 1)
-appleIconView.center = view.center
+appleIconView.backgroundColor = red
+appleIconView.frame = CGRect(x: view.center.x - (appleIconView.frame.width / 2.0), y: blueLine.frame.minY - ((137.0 / 2208.0) * view.frame.height), width: appleIconView.frame.width, height: appleIconView.frame.height)
 
 view.addSubview(appleIconView)
 
