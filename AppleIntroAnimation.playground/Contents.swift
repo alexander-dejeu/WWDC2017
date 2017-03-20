@@ -54,7 +54,7 @@ PlaygroundPage.current.liveView = view
 
 let anim: CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position")
 
-anim.repeatCount = 1
+anim.repeatCount = MAXFLOAT
 anim.duration = 1.5
 
 anim.path = rectPath1.cgPath
