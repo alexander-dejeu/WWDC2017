@@ -70,11 +70,57 @@ anim.path = rectPath4.cgPath
 dot4.layer.add(anim, forKey: "animate_along_path")
 
 
-
 view.addSubview(dot1)
 view.addSubview(dot2)
 view.addSubview(dot3)
 view.addSubview(dot4)
+
+let recLine1 = CAShapeLayer()
+let recLine2 = CAShapeLayer()
+let recLine3 = CAShapeLayer()
+let recLine4 = CAShapeLayer()
+
+view.layer.addSublayer(recLine1)
+view.layer.addSublayer(recLine2)
+view.layer.addSublayer(recLine3)
+view.layer.addSublayer(recLine4)
+var a = CABasicAnimation(keyPath: "strokeEnd")
+
+recLine1.path = rectPath1.cgPath
+recLine1.strokeColor = UIColor.black.cgColor
+recLine1.lineWidth = 2
+recLine1.fillColor = UIColor.clear.cgColor
+recLine1.lineCap = "round"
+
+recLine2.path = rectPath2.cgPath
+recLine2.strokeColor = UIColor.black.cgColor
+recLine2.lineWidth = 2
+recLine2.fillColor = UIColor.clear.cgColor
+recLine2.lineCap = "round"
+
+recLine3.path = rectPath3.cgPath
+recLine3.strokeColor = UIColor.black.cgColor
+recLine3.lineWidth = 2
+recLine3.fillColor = UIColor.clear.cgColor
+recLine3.lineCap = "round"
+
+recLine4.path = rectPath4.cgPath
+recLine4.strokeColor = UIColor.black.cgColor
+recLine4.lineWidth = 2
+recLine4.fillColor = UIColor.clear.cgColor
+recLine4.lineCap = "round"
+
+a.duration = 1.5
+a.fromValue = 0
+a.timingFunction = CAMediaTimingFunction(name: "linear")
+a.toValue = 1
+a.repeatCount = Float.infinity
+
+recLine1.add(a, forKey: "strokeEnd")
+recLine2.add(a, forKey: "strokeEnd")
+recLine3.add(a, forKey: "strokeEnd")
+recLine4.add(a, forKey: "strokeEnd")
+
 
 
 
