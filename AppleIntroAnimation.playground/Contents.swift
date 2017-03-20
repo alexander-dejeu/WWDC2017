@@ -56,6 +56,7 @@ let anim: CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position")
 
 anim.repeatCount = MAXFLOAT
 anim.duration = 1.5
+anim.timingFunction = CAMediaTimingFunction(name: "easeOut")
 
 anim.path = rectPath1.cgPath
 dot1.layer.add(anim, forKey: "animate_along_path")
@@ -70,20 +71,20 @@ anim.path = rectPath4.cgPath
 dot4.layer.add(anim, forKey: "animate_along_path")
 
 
-view.addSubview(dot1)
-view.addSubview(dot2)
-view.addSubview(dot3)
-view.addSubview(dot4)
+//view.addSubview(dot1)
+//view.addSubview(dot2)
+//view.addSubview(dot3)
+//view.addSubview(dot4)
 
 let recLine1 = CAShapeLayer()
 let recLine2 = CAShapeLayer()
 let recLine3 = CAShapeLayer()
 let recLine4 = CAShapeLayer()
 
-view.layer.addSublayer(recLine1)
-view.layer.addSublayer(recLine2)
-view.layer.addSublayer(recLine3)
-view.layer.addSublayer(recLine4)
+//view.layer.addSublayer(recLine1)
+//view.layer.addSublayer(recLine2)
+//view.layer.addSublayer(recLine3)
+//view.layer.addSublayer(recLine4)
 var a = CABasicAnimation(keyPath: "strokeEnd")
 
 recLine1.path = rectPath1.cgPath
@@ -112,17 +113,136 @@ recLine4.lineCap = "round"
 
 a.duration = 1.5
 a.fromValue = 0
-a.timingFunction = CAMediaTimingFunction(name: "linear")
+a.timingFunction = CAMediaTimingFunction(name: "easeOut")
 a.toValue = 1
 a.repeatCount = Float.infinity
 
-recLine1.add(a, forKey: "strokeEnd")
-recLine2.add(a, forKey: "strokeEnd")
-recLine3.add(a, forKey: "strokeEnd")
-recLine4.add(a, forKey: "strokeEnd")
+//recLine1.add(a, forKey: "strokeEnd")
+//recLine2.add(a, forKey: "strokeEnd")
+//recLine3.add(a, forKey: "strokeEnd")
+//recLine4.add(a, forKey: "strokeEnd")
+
+
+// Hexagon
+func getPolyPoints(sides: Int, radius : Int) -> [CGPoint] {
+  var result : [CGPoint] = []
+  
+  /*
+   x[n] = r * cos(2*pi*n/N)
+   y[n] = r * sin(2*pi*n/N)
+   where 0 <= n < N. Note that cos and sin here are working in radians, not degrees (this is pretty common in most programming languages).
+   
+   If you want a different centre, then just add the coordinates of the centre point to each (x[n], y[n]). If you want a different orientation, you just need to add a constant angle. So the general form is:
+   
+   x[n] = r * cos(2*pi*n/N + theta) + x_centre
+   y[n] = r * sin(2*pi*n/N + theta) + y_centre
+   */
+  
+  for i in 0..<sides{
+    let x = Double(radius) * cos(2.0 * M_PI * Double(i) / Double(sides) + (0.5 * M_PI)) + Double(view.bounds.midX)
+    let y = Double(radius) * sin(2.0 * M_PI * Double(i) / Double(sides) + (0.5 * M_PI)) + Double(view.bounds.midY)
+    
+    result.append(CGPoint(x: x, y: y))
+  }
+  return result
+}
+
+// Get the six points
+let hexPoints = getPolyPoints(sides: 6, radius: 50)
+
+let hexPath1 = UIBezierPath()
+hexPath1.move(to: hexPoints[0])
+hexPath1.addLine(to: hexPoints[1])
+hexPath1.addLine(to: hexPoints[2])
+
+let hexPath2 = UIBezierPath()
+hexPath2.move(to: hexPoints[2])
+hexPath2.addLine(to: hexPoints[3])
+hexPath2.addLine(to: hexPoints[4])
+
+let hexPath3 = UIBezierPath()
+hexPath3.move(to: hexPoints[4])
+hexPath3.addLine(to: hexPoints[5])
+hexPath3.addLine(to: hexPoints[0])
+
+let hexDot1 = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 5))
+hexDot1.backgroundColor = .white
+hexDot1.clipsToBounds = true
+hexDot1.layer.cornerRadius = hexDot1.bounds.width / 2.0
+
+let hexDot2 = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 5))
+hexDot2.backgroundColor = .white
+hexDot2.clipsToBounds = true
+hexDot2.layer.cornerRadius = hexDot2.bounds.width / 2.0
+
+let hexDot3 = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 5))
+hexDot3.backgroundColor = .white
+hexDot3.clipsToBounds = true
+hexDot3.layer.cornerRadius = hexDot3.bounds.width / 2.0
+
+let hexAnim: CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position")
+
+hexAnim.repeatCount = MAXFLOAT
+hexAnim.duration = 1.5
+hexAnim.timingFunction = CAMediaTimingFunction(name: "easeOut")
+
+hexAnim.path = hexPath1.cgPath
+hexDot1.layer.add(anim, forKey: "animate_along_path")
+
+hexAnim.path = hexPath2.cgPath
+hexDot2.layer.add(anim, forKey: "animate_along_path")
+
+hexAnim.path = hexPath3.cgPath
+hexDot3.layer.add(anim, forKey: "animate_along_path")
+
+view.addSubview(hexDot1)
+view.addSubview(hexDot2)
+view.addSubview(hexDot3)
+
+// Create 3 BeizierPaths
+// Throw some dots on and then animate the line similar to the rect.
+// When completed increase size and decrease alpha
+
+
+let hexLine1 = CAShapeLayer()
+let hexLine2 = CAShapeLayer()
+let hexLine3 = CAShapeLayer()
+
+view.layer.addSublayer(hexLine1)
+view.layer.addSublayer(hexLine2)
+view.layer.addSublayer(hexLine3)
+
+var b = CABasicAnimation(keyPath: "strokeEnd")
+
+hexLine1.path = hexPath1.cgPath
+hexLine1.strokeColor = UIColor.black.cgColor
+hexLine1.lineWidth = 2
+hexLine1.fillColor = UIColor.clear.cgColor
+hexLine1.lineCap = "round"
+
+hexLine2.path = hexPath2.cgPath
+hexLine2.strokeColor = UIColor.black.cgColor
+hexLine2.lineWidth = 2
+hexLine2.fillColor = UIColor.clear.cgColor
+hexLine2.lineCap = "round"
+
+hexLine3.path = hexPath3.cgPath
+hexLine3.strokeColor = UIColor.black.cgColor
+hexLine3.lineWidth = 2
+hexLine3.fillColor = UIColor.clear.cgColor
+hexLine3.lineCap = "round"
 
 
 
+b.duration = 1.5
+b.fromValue = 0
+b.timingFunction = CAMediaTimingFunction(name: "easeOut")
+b.toValue = 1
+b.repeatCount = Float.infinity
+
+hexLine1.add(b, forKey: "strokeEnd")
+hexLine2.add(b, forKey: "strokeEnd")
+hexLine3.add(b, forKey: "strokeEnd")
 
 
 
