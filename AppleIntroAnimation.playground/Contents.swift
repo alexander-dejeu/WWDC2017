@@ -28,17 +28,19 @@ enum TypeOfShape {
 
 class animatedShape : UIView {
   
-  init(shape : TypeOfShape, frame : CGRect){
+  init(shape : TypeOfShape, frame : CGRect, delay : Double){
     super.init(frame: frame)
+    DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+      switch shape{
+      case .circle:
+        self.createCircle()
+      case .square:
+        self.createSquare()
+      case .hexagon:
+        self.createHexagon()
+      }
+    })
     
-    switch shape{
-    case .circle:
-     createCircle()
-    case .square:
-      createSquare()
-    case .hexagon:
-      createHexagon()
-    }
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -104,6 +106,31 @@ class animatedShape : UIView {
     }
   }
   
+  func scaleShape(shape : CAShapeLayer, mask : UIBezierPath){
+    
+//    let newRadius : CGFloat = 50
+    
+//    let newPath: UIBezierPath = UIBezierPath(arcCenter: CGPoint(x: newRadius, y: newRadius), radius: newRadius, startAngle: (CGFloat(-M_PI) / 2.0), endAngle: (3 * CGFloat(M_PI) / 2), clockwise: true);
+    
+    
+    let newBounds : CGRect = CGRect(x: 0, y: 0, width: 2 * shape.bounds.width, height: 2 * shape.bounds.height);
+    let pathAnim : CABasicAnimation = CABasicAnimation(keyPath: "path");
+    
+    mask.apply(CGAffineTransform(scaleX: 3.0, y: 3.0))
+    pathAnim.toValue = mask.cgPath;
+    
+    let boundsAnim : CABasicAnimation = CABasicAnimation(keyPath: "bounds");
+    boundsAnim.toValue = NSValue(cgRect: newBounds);
+    
+    let anims: CAAnimationGroup = CAAnimationGroup();
+    anims.animations = [pathAnim, boundsAnim];
+    anims.isRemovedOnCompletion = false;
+    anims.duration = 2.0;
+    anims.fillMode = kCAFillModeForwards;
+    
+    shape.add(anims, forKey: nil);
+  }
+  
   func addExitFade(viewPath : UIBezierPath, shape : TypeOfShape = .square){
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.48, execute: {
       print("Add view and go!")
@@ -127,31 +154,41 @@ class animatedShape : UIView {
       }
       
       let newLayer = CAShapeLayer()
-      self.layer.addSublayer(newLayer)
+//      self.layer.addSublayer(newLayer)
       
       newLayer.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
       
       newLayer.backgroundColor = UIColor.white.cgColor
+      newLayer.borderWidth = 1
       let mask = CAShapeLayer()
       mask.path = viewPath.cgPath
       newLayer.mask = mask
+//      newLayer.transform = CATransform3DMakeScale(2.0, 2.0, 1)
+//      self.scaleShape(shape: newLayer, mask : viewPath)
+//      let transformAnimation = CABasicAnimation(keyPath: "transform")
+//      
+//      transformAnimation.duration = 2.0
+//      transformAnimation.fromValue = 0
+//      transformAnimation.toValue = NSValue(caTransform3D: CATransform3DMakeScale(2.0, 2.0, 1.0))
+//      newLayer.add(transformAnimation, forKey: "transform")
+//      
+//      newLayer.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+  
+//      var transformAnim            = CAKeyframeAnimation(keyPath:"transform")
+//      transformAnim.values = [CATransform3DMakeScale(2.0, 2.0 , 1)]
+//      transformAnim.duration       = 2.0
+//      newLayer.add(transformAnim, forKey: "transform")
       
-      let transformAnimation = CABasicAnimation(keyPath: "transform")
       
-      transformAnimation.duration = 2.0
-      transformAnimation.fromValue = 0
-      transformAnimation.toValue = CATransform3DMakeScale(2.0, 2.0, 1.0)
-      newLayer.add(transformAnimation, forKey: "transform")
+      self.addSubview(newView)
       
-//      self.addSubview(newView)
-      
-//      UIView.animate(withDuration: 2.0, animations: {
-//        newView.bounds.size = CGSize(width : self.bounds.size.width * 2.0, height: self.bounds.size.height * 2.0)
-//        newView.alpha = 0.0
-////        if shape == .circle{
-////          newView.layer.cornerRadius = min(newView.bounds.size.width / 2.0, newView.bounds.size.height / 2.0)
-////        }
-//      })
+      UIView.animate(withDuration: 2.0, animations: {
+        newView.bounds.size = CGSize(width : self.bounds.size.width * 2.0, height: self.bounds.size.height * 2.0)
+        newView.alpha = 0.0
+//        if shape == .circle{
+//          newView.layer.cornerRadius = min(newView.bounds.size.width / 2.0, newView.bounds.size.height / 2.0)
+//        }
+      })
       
     })
   }
@@ -285,17 +322,19 @@ var view = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
 view.backgroundColor = #colorLiteral(red: 0.1560676694, green: 0.163968116, blue: 0.2117111683, alpha: 1)
 PlaygroundPage.current.liveView = view
 
-let circle = animatedShape(shape: .circle, frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-circle.center = view.center
-//view.addSubview(circle)
-
-let square = animatedShape(shape: .square, frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+let square = animatedShape(shape: .square, frame: CGRect(x: 0, y: 0, width: 100, height: 100), delay: 0.0)
 square.center = view.center
-//view.addSubview(square)
+view.addSubview(square)
 
-let hexagon = animatedShape(shape: .hexagon, frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+let hexagon = animatedShape(shape: .hexagon, frame: CGRect(x: 0, y: 0, width: 100, height: 100), delay: 1.5)
 hexagon.center = view.center
 view.addSubview(hexagon)
+
+let circle = animatedShape(shape: .circle, frame: CGRect(x: 0, y: 0, width: 100, height: 100), delay: 3.0)
+circle.center = view.center
+view.addSubview(circle)
+
+
 
 
 
