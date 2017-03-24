@@ -31,11 +31,20 @@ for i in 0..<470{
 let leftStartingX = 0.2077596996 * w
 let bothStartingY = 0.1158730159 * h
 let rightStartingX = 0.7834793492 * w
+
 let leftInnerStartingX = 0.2321652065 * w
 let rightInnterStartingX = 0.7590738423 * w
 let innerStartingY = 0.1571428571 * h
 
-func addLongVert(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
+let outerHoriStartingX = 0.296620776 * w
+let topHoriStartingY = 0.06626984127 * h
+let bottomHoriStartingY = 0.8337301587 * h
+
+let innerHoriStartingX = 0.2453066333 * w
+let innerHoriTopY = 0.1571428571 * h
+let innerHoriBottomY = 0.7523809524 * h
+
+func addVert(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
   for i in startingDotIndex..<startingDotIndex+count{
     let curY = startingY + CGFloat((i - startingDotIndex) * (5 + 5))
     UIView.animate(withDuration: 0.5, delay: 0.3, options: [.curveEaseOut], animations: {
@@ -46,9 +55,27 @@ func addLongVert(startingX : CGFloat, startingY : CGFloat, startingDotIndex : In
   }
 }
 
-addLongVert(startingX: leftStartingX, startingY: bothStartingY, startingDotIndex: 0, count : 85)
-addLongVert(startingX: rightStartingX, startingY: bothStartingY, startingDotIndex: 85, count : 85)
+func addHori(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
+  for i in startingDotIndex..<startingDotIndex+count{
+    let curX = startingX + CGFloat((i - startingDotIndex) * (5 + 5))
+    UIView.animate(withDuration: 0.5, delay: 0.3, options: [.curveEaseOut], animations: {
+      dotArray[i].frame = CGRect(x: curX, y: startingY, width: 5, height: 5)
+    }, completion: nil)
+  }
+}
+
+addVert(startingX: leftStartingX, startingY: bothStartingY, startingDotIndex: 0, count : 85)
+addVert(startingX: rightStartingX, startingY: bothStartingY, startingDotIndex: 85, count : 85)
 
 //Add Inner Vertical Lines
-addLongVert(startingX: leftInnerStartingX, startingY: innerStartingY,startingDotIndex: 170, count : 76)
-addLongVert(startingX: rightInnterStartingX, startingY: innerStartingY,startingDotIndex: 246, count : 76)
+addVert(startingX: leftInnerStartingX, startingY: innerStartingY,startingDotIndex: 170, count : 76)
+addVert(startingX: rightInnterStartingX, startingY: innerStartingY,startingDotIndex: 246, count : 76)
+
+addHori(startingX: outerHoriStartingX, startingY: topHoriStartingY, startingDotIndex: 322, count: 33)
+addHori(startingX: outerHoriStartingX, startingY: bottomHoriStartingY, startingDotIndex: 355, count: 33)
+
+addHori(startingX: innerHoriStartingX, startingY: innerHoriTopY, startingDotIndex: 388, count: 41)
+addHori(startingX: innerHoriStartingX, startingY: innerHoriBottomY, startingDotIndex: 429, count: 41)
+
+
+
