@@ -14,7 +14,7 @@ PlaygroundPage.current.liveView = view
 
 var dotArray : [UIView] = []
 
-for i in 0..<470{
+for i in 0..<490{
   let randX = Int(arc4random_uniform(UInt32(w)))
   let randY = Int(arc4random_uniform(UInt32(h)))
   
@@ -44,14 +44,16 @@ let innerHoriStartingX = 0.2453066333 * w
 let innerHoriTopY = 0.1571428571 * h
 let innerHoriBottomY = 0.7523809524 * h
 
+let homeButtonCenterX = 0.4981226533 * w
+let homeButtonCenterY = 0.7944444444 * h
+let homeButtonRadius = 0.03015873016 * h
+
 func addVert(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
   for i in startingDotIndex..<startingDotIndex+count{
     let curY = startingY + CGFloat((i - startingDotIndex) * (5 + 5))
     UIView.animate(withDuration: 0.5, delay: 0.3, options: [.curveEaseOut], animations: {
       dotArray[i].frame = CGRect(x: startingX, y: curY, width: 5, height: 5)
     }, completion: nil)
-    
-    //  dotArray[i].frame =
   }
 }
 
@@ -62,6 +64,25 @@ func addHori(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, c
       dotArray[i].frame = CGRect(x: curX, y: startingY, width: 5, height: 5)
     }, completion: nil)
   }
+}
+func getPolyPoints(sides: Int, radius : Double, rotation : Double, centerX: Double, centerY : Double) -> [CGPoint] {
+  /*
+   x[n] = r * cos(2*pi*n/N)
+   y[n] = r * sin(2*pi*n/N)
+   
+   If you want a different centre, then just add the coordinates of the centre point to each (x[n], y[n]). If you want a different orientation, you just need to add a constant angle. So the general form is:
+   
+   x[n] = r * cos(2*pi*n/N + theta) + x_centre
+   y[n] = r * sin(2*pi*n/N + theta) + y_centre
+   */
+  var result : [CGPoint] = []
+  
+  for i in 0..<sides{
+    let x = Double(radius) * cos(2.0 * M_PI * Double(i) / Double(sides) + rotation) + Double(centerX)
+    let y = Double(radius) * sin(2.0 * M_PI * Double(i) / Double(sides) + rotation) + Double(centerY)
+    result.append(CGPoint(x: x, y: y))
+  }
+  return result
 }
 
 addVert(startingX: leftStartingX, startingY: bothStartingY, startingDotIndex: 0, count : 85)
@@ -76,6 +97,23 @@ addHori(startingX: outerHoriStartingX, startingY: bottomHoriStartingY, startingD
 
 addHori(startingX: innerHoriStartingX, startingY: innerHoriTopY, startingDotIndex: 388, count: 41)
 addHori(startingX: innerHoriStartingX, startingY: innerHoriBottomY, startingDotIndex: 429, count: 41)
+
+func addCircle(centerX : CGFloat, centerY : CGFloat, startingDotIndex : Int, count : Int, sides: Int, radius : Double, rotation : Double){
+  let points = getPolyPoints(sides: sides, radius: radius, rotation: rotation, centerX: Double(centerX), centerY: Double(centerY))
+  
+  for i in startingDotIndex..<startingDotIndex+count{
+    let curX = points[i - startingDotIndex].x
+    let curY = points[i - startingDotIndex].y
+    UIView.animate(withDuration: 0.5, delay: 0.3, options: [.curveEaseOut], animations: {
+      dotArray[i].frame = CGRect(x: curX, y: curY, width: 5, height: 5)
+    }, completion: nil)
+  }
+  
+  
+}
+
+addCircle(centerX: homeButtonCenterX, centerY: homeButtonCenterY, startingDotIndex: 470, count: 20, sides: 20, radius: Double(homeButtonRadius), rotation: 0)
+
 
 
 
