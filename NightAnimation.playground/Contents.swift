@@ -12,6 +12,16 @@ PlaygroundPage.current.liveView = view
 
 //470 base dots!
 
+
+
+
+
+
+
+
+
+//TODO: Timer based one?!?
+
 var dotArray : [UIView] = []
 
 for i in 0..<490{
@@ -37,7 +47,7 @@ let rightInnterStartingX = 0.7590738423 * w
 let innerStartingY = 0.1571428571 * h
 
 let outerHoriStartingX = 0.296620776 * w
-let topHoriStartingY = 0.06626984127 * h
+let topHoriStartingY = 0.11626984127 * h
 let bottomHoriStartingY = 0.8337301587 * h
 
 let innerHoriStartingX = 0.2453066333 * w
@@ -113,6 +123,7 @@ func addCircle(centerX : CGFloat, centerY : CGFloat, startingDotIndex : Int, cou
 }
 
 addCircle(centerX: homeButtonCenterX, centerY: homeButtonCenterY, startingDotIndex: 470, count: 20, sides: 20, radius: Double(homeButtonRadius), rotation: 0)
+
 
 
 
