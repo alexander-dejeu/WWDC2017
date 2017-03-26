@@ -350,14 +350,6 @@ class incrementalLabel : UILabel {
     self.text = dateFormatter.string(from: curTime)
     
   }
-  
-  
-  //Save the start time
-  //We know the end time 
-  //Therefore by looking at the end - start we know how much has progress and what percentage that is
-  //Then we can set the text to represent that? 
-
-  // start the timer
 }
 
 class watchScene : UIView, CAAnimationDelegate{
@@ -374,15 +366,13 @@ class watchScene : UIView, CAAnimationDelegate{
     super.init(frame: frame)
     
     let sunPath = UIBezierPath()
-    sunPath.move(to: CGPoint(x: -0.11, y: 354.09))
-    sunPath.addCurve(to: CGPoint(x: 399.39, y: 26.55), controlPoint1: CGPoint(x: -0.11, y: 354.09), controlPoint2: CGPoint(x: 202.24, y: 21.67))
-    sunPath.addCurve(to: CGPoint(x: 798.89, y: 354.09), controlPoint1: CGPoint(x: 598.97, y: 31.5), controlPoint2: CGPoint(x: 798.89, y: 354.09))
+    sunPath.move(to: CGPoint(x: 1, y: 246))
+    sunPath.addCurve(to: CGPoint(x: 300.5, y: 0.04), controlPoint1: CGPoint(x: 1, y: 246), controlPoint2: CGPoint(x: 152.7, y: -3.63))
+    sunPath.addCurve(to: CGPoint(x: 600, y: 246), controlPoint1: CGPoint(x: 450.12, y: 3.75), controlPoint2: CGPoint(x: 600, y: 246))
+    
     sunPath.lineWidth = 1
     
     sunView = UIView(frame: CGRect(x: 0.225375626 * self.frame.width, y: 0.2317460317 * self.frame.height, width: 0.2846560847 * self.frame.height, height: 0.2846560847 * self.frame.height))
-    //135 X
-    // 219 Y
-    // 269 H + W
     sunView.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
     sunView.clipsToBounds = true
     sunView.layer.cornerRadius = sunView.frame.width / 2.0
