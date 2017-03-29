@@ -184,13 +184,13 @@ let tripleBumpCloud : Cloud = Cloud(frame: CGRect(x: 361.5, y: 354.75, width: 21
 let largestCloud : Cloud = Cloud(frame: CGRect(x: 177, y: 354.75, width: 252, height: 156))
 
 
-let leftAirPodCloud : Cloud = Cloud(frame: CGRect(x: -123.24, y: 241.88, width: 112.5, height: 236.25))
-let rightAirPodCloud : Cloud = Cloud(frame: CGRect(x: 406.5, y: 110.25, width: 113.25, height: 259.5))
+let leftAirPodCloud : Cloud = Cloud(frame: CGRect(x: -123.24, y: 241.88, width: 271.25, height: 126))
+let rightAirPodCloud : Cloud = Cloud(frame: CGRect(x: 406.5, y: 110.25, width: 271.25, height: 126))
 
 
 doubleCloud.cloudType = .partialLeftAndFullRightCloud
 singleCenterCloud.cloudType = .basicOutlineCloud
-singleLeftCloud.cloudType = .basicOutlineCloud
+singleLeftCloud.cloudType = .outlinedCloud
 bigFillCloud.cloudType = .bigBasicFilledCloud
 fatLeftLongCloud.cloudType = .midLongCloud
 longRightCloud.cloudType = .outlinedLongCloud
