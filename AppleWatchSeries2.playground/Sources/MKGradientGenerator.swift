@@ -7,7 +7,7 @@ public enum GradientType: Int {
   case conical
   case bilinear
 }
-
+//https://github.com/maxkonovalov/MKRingProgressView
 open class MKGradientGenerator {
   
   open class func gradientImage(type: GradientType, size: CGSize, colors: [CGColor], colors2: [CGColor]? = nil, locations: [Float]? = nil, locations2: [Float]? = nil, startPoint: CGPoint? = nil, endPoint: CGPoint? = nil, startPoint2: CGPoint? = nil, endPoint2: CGPoint? = nil, scale: CGFloat? = nil) -> CGImage {
