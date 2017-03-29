@@ -38,7 +38,7 @@ open class NightSky : UIView {
     innerStartingY = 0.1571428571 * h
     
     outerHoriStartingX = 0.296620776 * w
-    topHoriStartingY = 0.11626984127 * h
+    topHoriStartingY = 0.06626984127 * h
     bottomHoriStartingY = 0.8337301587 * h
     
     innerHoriStartingX = 0.2453066333 * w
@@ -57,7 +57,7 @@ open class NightSky : UIView {
       let randX = Int(arc4random_uniform(UInt32(w)))
       let randY = Int(arc4random_uniform(UInt32(h)))
       
-      let newDot : UIView = UIView(frame: CGRect(x: randX, y: randY, width: 5, height: 5))
+      let newDot : UIView = UIView(frame: CGRect(x: Double(randX), y: Double(randY), width: 3.75, height: 3.75))
       newDot.backgroundColor = .white
       newDot.clipsToBounds = true
       newDot.layer.cornerRadius = newDot.frame.width / 2.0
@@ -121,18 +121,18 @@ open class NightSky : UIView {
   
   func addVert(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
     for i in startingDotIndex..<startingDotIndex+count{
-      let curY = startingY + CGFloat((i - startingDotIndex) * (5 + 5))
-      UIView.animate(withDuration: 0.5, delay: 0.3, options: [.curveEaseOut], animations: {
-        self.dotArray[i].frame = CGRect(x: startingX, y: curY, width: 5, height: 5)
+      let curY = startingY + CGFloat(Double(i - startingDotIndex) * (3.75 + 3.75))
+      UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+        self.dotArray[i].frame = CGRect(x: startingX, y: curY, width: 3.75, height: 3.75)
       }, completion: nil)
     }
   }
   
   func addHori(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
     for i in startingDotIndex..<startingDotIndex+count{
-      let curX = startingX + CGFloat((i - startingDotIndex) * (5 + 5))
-      UIView.animate(withDuration: 0.5, delay: 0.3, options: [.curveEaseOut], animations: {
-        self.dotArray[i].frame = CGRect(x: curX, y: startingY, width: 5, height: 5)
+      let curX = startingX + CGFloat(Double(i - startingDotIndex) * (3.75 + 3.75))
+      UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+        self.dotArray[i].frame = CGRect(x: curX, y: startingY, width: 3.75, height: 3.75)
       }, completion: nil)
     }
   }
@@ -164,7 +164,7 @@ open class NightSky : UIView {
       let curX = points[i - startingDotIndex].x
       let curY = points[i - startingDotIndex].y
       UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
-        self.dotArray[i].frame = CGRect(x: curX, y: curY, width: 5, height: 5)
+        self.dotArray[i].frame = CGRect(x: curX, y: curY, width: 3.75, height: 3.75)
       }, completion: nil)
     }
     

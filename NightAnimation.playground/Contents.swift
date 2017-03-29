@@ -15,16 +15,3 @@ PlaygroundPage.current.liveView = view
 
 let night = NightSky(frame : view.frame)
 view.addSubview(night)
-
-
-
-
-
-
-//TODO: Timer based one?!?
-
-
-
-
-
-
