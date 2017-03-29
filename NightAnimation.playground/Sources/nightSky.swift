@@ -89,29 +89,29 @@ open class NightSky : UIView {
       print("Do we crash here?")
       displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
       print("or after?")
-//      addVert(startingX: leftStartingX, startingY: bothStartingY, startingDotIndex: 0, count : 85)
-//      addVert(startingX: rightStartingX, startingY: bothStartingY, startingDotIndex: 85, count : 85)
-//      
-//      //Add Inner Vertical Lines
-//      addVert(startingX: leftInnerStartingX, startingY: innerStartingY,startingDotIndex: 170, count : 76)
-//      addVert(startingX: rightInnterStartingX, startingY: innerStartingY,startingDotIndex: 246, count : 76)
-//      
-//      addHori(startingX: outerHoriStartingX, startingY: topHoriStartingY, startingDotIndex: 322, count: 33)
-//      addHori(startingX: outerHoriStartingX, startingY: bottomHoriStartingY, startingDotIndex: 355, count: 33)
-//      
-//      addHori(startingX: innerHoriStartingX, startingY: innerHoriTopY, startingDotIndex: 388, count: 41)
-//      addHori(startingX: innerHoriStartingX, startingY: innerHoriBottomY, startingDotIndex: 429, count: 41)
-//      
-//      addCircle(centerX: homeButtonCenterX, centerY: homeButtonCenterY, startingDotIndex: 470, count: 20, sides: 20, radius: Double(homeButtonRadius), rotation: 0)
+      addVert(startingX: leftStartingX, startingY: bothStartingY, startingDotIndex: 0, count : 85)
+      addVert(startingX: rightStartingX, startingY: bothStartingY, startingDotIndex: 85, count : 85)
+      
+      //Add Inner Vertical Lines
+      addVert(startingX: leftInnerStartingX, startingY: innerStartingY,startingDotIndex: 170, count : 76)
+      addVert(startingX: rightInnterStartingX, startingY: innerStartingY,startingDotIndex: 246, count : 76)
+      
+      addHori(startingX: outerHoriStartingX, startingY: topHoriStartingY, startingDotIndex: 322, count: 33)
+      addHori(startingX: outerHoriStartingX, startingY: bottomHoriStartingY, startingDotIndex: 355, count: 33)
+      
+      addHori(startingX: innerHoriStartingX, startingY: innerHoriTopY, startingDotIndex: 388, count: 41)
+      addHori(startingX: innerHoriStartingX, startingY: innerHoriBottomY, startingDotIndex: 429, count: 41)
+      
+      addCircle(centerX: homeButtonCenterX, centerY: homeButtonCenterY, startingDotIndex: 470, count: 20, sides: 20, radius: Double(homeButtonRadius), rotation: 0)
     }
     
     let totalViewCount : Double = 490
     // Add the right amount of views!
     let amountToShow = totalViewCount * percentToEnd
     
-    while viewsAddedCounter <= Int(amountToShow){
+    while viewsAddedCounter < Int(amountToShow){
       print(viewsAddedCounter)
-      if viewsAddedCounter > dotArray.count{
+      if viewsAddedCounter >= dotArray.count{
         return
       }
       self.addSubview(dotArray[viewsAddedCounter])
