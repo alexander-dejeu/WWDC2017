@@ -2,7 +2,6 @@ import UIKit
 
 public class incrementalLabel : UILabel {
   
-  
   var counter : Double = 0
   var timer = Timer()
   
@@ -13,10 +12,21 @@ public class incrementalLabel : UILabel {
   var timePerSec : Double = 1
   var duration: Double = 1
   
+  var endValue : Double = 0
+  var labelValue : Double = -1
+  
   
   override public init(frame: CGRect) {
     super.init(frame: frame)
     
+  }
+  
+  public init(frame : CGRect, endValue : Double, duration : Double){
+    super.init(frame: frame)
+    createDisplayLinkForActLabels()
+    self.endValue = endValue
+    self.duration = duration
+    self.text = "\(labelValue)"
   }
   
   public init(frame: CGRect, startTime : Double, endTime : Double, secDuration : Double){
@@ -31,8 +41,6 @@ public class incrementalLabel : UILabel {
     requiredSeconds = Double(endTime - startTime)
     timePerSec = secDuration / Double(requiredSeconds)
     
-    timer = Timer.scheduledTimer(timeInterval: timePerSec, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-    print(timer.timeInterval)
     self.text = dateFormatter.string(from: startDate)
     createDisplayLink()
   }
@@ -46,20 +54,7 @@ public class incrementalLabel : UILabel {
     //    self.layer.borderColor = borderColor.CGColor
   }
   
-  func timerAction() {
-    
-    if counter >= requiredSeconds{
-      timer.invalidate()
-      return
-    }
-    counter += Double(endTimeDate - startTimeSec) / duration / 60.0
-    
-    
-    let curTime = Date(timeIntervalSince1970: TimeInterval(Double(startTimeSec) + counter))
-    
-    //    self.text = dateFormatter.string(from: curTime)
-    
-  }
+  
   var startTimeStamp : Double = -1
   var endTimeStamp : Double = 1
   
@@ -71,6 +66,38 @@ public class incrementalLabel : UILabel {
                     forMode: .defaultRunLoopMode)
   }
   
+  func createDisplayLinkForActLabels(){
+    let displaylink = CADisplayLink(target: self,
+                                    selector: #selector(stepLabel))
+    
+    displaylink.add(to: .current,
+                    forMode: .defaultRunLoopMode)
+  }
+  
+  func stepLabel(displaylink: CADisplayLink) {
+    if labelValue == -1 {
+      startTimeStamp = displaylink.timestamp
+      endTimeStamp = startTimeStamp + duration
+      labelValue = 0
+    }
+    
+    let curTimeStamp = displaylink.timestamp
+    print(curTimeStamp)
+    print(startTimeStamp)
+    print(endTimeStamp)
+    let percentToEnd = (curTimeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
+    
+    if percentToEnd >= 1.0{
+      displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
+    }
+    
+    labelValue = endValue * percentToEnd
+    
+    print(percentToEnd)
+    self.text = "\(Int(labelValue))"
+    
+  }
+  
   func step(displaylink: CADisplayLink) {
     if startTimeStamp == -1{
       startTimeStamp = displaylink.timestamp
@@ -80,7 +107,7 @@ public class incrementalLabel : UILabel {
     
     
     let percentToEnd = (curTimeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
-    print(percentToEnd)
+//    print(percentToEnd)
     
     if percentToEnd >= 1.0{
       displaylink.remove(from: .current, forMode: .defaultRunLoopMode)

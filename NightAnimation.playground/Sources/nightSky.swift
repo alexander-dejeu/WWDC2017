@@ -22,6 +22,12 @@ open class NightSky : UIView {
   var homeButtonCenterX : CGFloat = 1
   var homeButtonCenterY : CGFloat = 1
   var homeButtonRadius : CGFloat = 1
+  
+  var ventStartingX : CGFloat = 1
+  var ventStartingY : CGFloat = 1
+  
+  var microphoneStartingX : CGFloat = 1
+  var microphoneStartingY : CGFloat = 1
 
   
   override public init(frame: CGRect) {
@@ -48,12 +54,19 @@ open class NightSky : UIView {
     homeButtonCenterX = 0.4981226533 * w
     homeButtonCenterY = 0.7944444444 * h
     homeButtonRadius = 0.03015873016 * h
+    
+    ventStartingX = 0.4545075125 * w
+    ventStartingY = 0.1095238095 * h
+    
+    microphoneStartingX = 0.4983305509 * w
+    microphoneStartingY = 0.0873015873 * h
+    
     let displaylink = CADisplayLink(target: self,
                                     selector: #selector(step))
     displaylink.add(to: .current,
                     forMode: .defaultRunLoopMode)
     
-    for i in 0..<490{
+    for i in 0..<533{
       let randX = Int(arc4random_uniform(UInt32(w)))
       let randY = Int(arc4random_uniform(UInt32(h)))
       
@@ -83,12 +96,9 @@ open class NightSky : UIView {
     let curTimeStamp = displaylink.timestamp
     
     let percentToEnd = (curTimeStamp - startDisplayLinkTime) / (endTimeStamp - startDisplayLinkTime)
-    print(percentToEnd)
     
-    if percentToEnd >= 1.0 &&  viewsAddedCounter >= 490{
-      print("Do we crash here?")
+    if percentToEnd >= 1.0 &&  viewsAddedCounter >= 533{
       displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
-      print("or after?")
       addVert(startingX: leftStartingX, startingY: bothStartingY, startingDotIndex: 0, count : 85)
       addVert(startingX: rightStartingX, startingY: bothStartingY, startingDotIndex: 85, count : 85)
       
@@ -103,14 +113,19 @@ open class NightSky : UIView {
       addHori(startingX: innerHoriStartingX, startingY: innerHoriBottomY, startingDotIndex: 429, count: 41)
       
       addCircle(centerX: homeButtonCenterX, centerY: homeButtonCenterY, startingDotIndex: 470, count: 20, sides: 20, radius: Double(homeButtonRadius), rotation: 0)
+      
+      addHori(startingX: ventStartingX, startingY: ventStartingY, startingDotIndex: 490, count: 8)
+      addHori(startingX: microphoneStartingX, startingY: microphoneStartingY, startingDotIndex: 498, count: 1)
+      
+      // Add the rounded edges!
+      addCorner(startingDotIndex: 499, count: 34)
     }
     
-    let totalViewCount : Double = 490
+    let totalViewCount : Double = 533
     // Add the right amount of views!
     let amountToShow = totalViewCount * percentToEnd
     
     while viewsAddedCounter < Int(amountToShow){
-      print(viewsAddedCounter)
       if viewsAddedCounter >= dotArray.count{
         return
       }
@@ -118,6 +133,34 @@ open class NightSky : UIView {
       viewsAddedCounter += 1
     }
   }
+  
+  func addCorner(startingDotIndex: Int, count : Int){
+    let xPointsTL :[CGFloat] = [0.211602671118531, 0.21661101836394, 0.222871452420701, 0.234140233722871, 0.245409015025042, 0.257929883138564, 0.271702838063439, 0.284223706176962]
+    let yPointsTL :[CGFloat] = [0.105164021164021, 0.0948359788359788, 0.0868994708994709, 0.078962962962963, 0.0742010582010582, 0.0702433862433862, 0.0678518518518519, 0.0666666666666667]
+    
+    let xPointsTR : [CGFloat] = [0.781302170283806, 0.776293823038397, 0.770033388981636, 0.758764607679466, 0.747495826377296, 0.734974958263773, 0.721202003338898, 0.708681135225376]
+    let yPointsTR : [CGFloat] = [0.105164021164021, 0.0948359788359788, 0.0868994708994709, 0.078962962962963, 0.0742010582010582, 0.0702433862433862, 0.0678518518518519, 0.0666666666666667]
+    
+    let xPointsBR : [CGFloat] = [0.708046744574291, 0.720567612687813, 0.733088480801336, 0.745609348914858, 0.758130217028381, 0.768146911519199, 0.775659432387312, 0.779432387312187, 0.782420701168614]
+    let yPointsBR : [CGFloat] = [0.833333333333333, 0.832539682539683, 0.83015873015873, 0.826190476190476, 0.820634920634921, 0.813492063492063, 0.805555555555556, 0.797619047619048, 0.79047619047619]
+    
+    let xPointsBL : [CGFloat] = [0.284223706176962, 0.271702838063439, 0.259181969949917, 0.246661101836394, 0.234140233722871, 0.224123539232053, 0.21661101836394, 0.212854757929883, 0.209849749582638]
+    let yPointsBL : [CGFloat] = [0.833333333333333, 0.832539682539683, 0.83015873015873, 0.826190476190476, 0.820634920634921, 0.813492063492063, 0.805555555555556, 0.797619047619048, 0.79047619047619]
+    
+    let allXPoints : [CGFloat] = xPointsTL + xPointsTR + xPointsBR + xPointsBL
+    let allYPoints : [CGFloat] = yPointsTL + yPointsTR + yPointsBR + yPointsBL
+    
+    for i in startingDotIndex..<startingDotIndex+count{
+      let curX = allXPoints[i - startingDotIndex] * self.frame.width
+      let curY = allYPoints[i - startingDotIndex] * self.frame.height
+      
+      UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+        self.dotArray[i].frame = CGRect(x: curX, y: curY, width: 3.75, height: 3.75)
+      }, completion: nil)
+    }
+    
+  }
+
   
   func addVert(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int){
     for i in startingDotIndex..<startingDotIndex+count{

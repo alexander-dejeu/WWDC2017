@@ -6,15 +6,29 @@ public class customWatchView : UIView{
     super.init(frame: frame)
     
     
-    let timeLabel = incrementalLabel(frame: CGRect(x: 0, y: 175, width: self.frame.width, height: 106), startTime: 1490510581, endTime: 1490556210, secDuration: 12)
+    let timeLabel = incrementalLabel(frame: CGRect(x: 34, y: 175, width: self.frame.width, height: 106), startTime: 1490510581, endTime: 1490556210, secDuration: 12)
     timeLabel.font = UIFont.systemFont(ofSize: 64, weight: UIFontWeightMedium)
     timeLabel.minimumScaleFactor = 0.5
-    timeLabel.textAlignment = .center
-    let trueCenter = CGPoint(x: self.center.x, y: timeLabel.center.y)
-    timeLabel.center = trueCenter
+    timeLabel.textAlignment = .left
     self.addSubview(timeLabel)
     
-    //    let activityLabel =
+    let activityLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 284, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: 736.0, duration: 12.0)
+    activityLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
+    activityLabel.minimumScaleFactor = 0.5
+    activityLabel.textAlignment = .right
+    self.addSubview(activityLabel)
+    
+    let excersizeLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 348.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: 64, duration: 12.0)
+    excersizeLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
+    excersizeLabel.minimumScaleFactor = 0.5
+    excersizeLabel.textAlignment = .right
+    self.addSubview(excersizeLabel)
+    
+    let standingLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 408.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: 13, duration: 12.0)
+    standingLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
+    standingLabel.minimumScaleFactor = 0.5
+    standingLabel.textAlignment = .right
+    self.addSubview(standingLabel)
     
     
     let ringProgressView = MKRingProgressView(frame: CGRect(x: 30.5, y: 315.75, width: 156, height: 156))
