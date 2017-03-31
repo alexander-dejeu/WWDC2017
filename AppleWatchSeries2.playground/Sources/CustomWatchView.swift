@@ -28,18 +28,21 @@ public class customWatchView : UIView{
     activityLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
     activityLabel.minimumScaleFactor = 0.5
     activityLabel.textAlignment = .right
+    activityLabel.textColor = #colorLiteral(red: 0.8811283112, green: 0, blue: 0.0722764805, alpha: 1)
     self.addSubview(activityLabel)
     
     let excersizeLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 348.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: exerciseTotal, duration: 12.0)
     excersizeLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
     excersizeLabel.minimumScaleFactor = 0.5
     excersizeLabel.textAlignment = .right
+    excersizeLabel.textColor = #colorLiteral(red: 0.2136939466, green: 0.8621223569, blue: 0.005727462936, alpha: 1)
     self.addSubview(excersizeLabel)
     
     let standingLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 408.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: standTotal, duration: 12.0)
     standingLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
     standingLabel.minimumScaleFactor = 0.5
     standingLabel.textAlignment = .right
+    standingLabel.textColor = #colorLiteral(red: 0.002058682498, green: 0.7290638089, blue: 0.8833985925, alpha: 1)
     self.addSubview(standingLabel)
     
     
@@ -89,7 +92,7 @@ public class customWatchView : UIView{
     
     let denominator : Double = 12
     // Because we are rounding I am shifting it back by a half an hour :)
-    standPercent = round((standPercent- (1.0 / 24.0))*denominator )/denominator
+    standPercent = round((standPercent - (1.0 / 24.0))*denominator )/denominator
     print("Stand : \(standPercent)")
   
     ringProgressView.progress = activityPercent
