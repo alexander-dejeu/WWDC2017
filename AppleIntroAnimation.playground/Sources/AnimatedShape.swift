@@ -136,7 +136,7 @@ public class animatedShape : UIView {
       let newLayer = CAShapeLayer()
       //      self.layer.addSublayer(newLayer)
       
-      newLayer.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+      newLayer.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
       
       newLayer.backgroundColor = UIColor.white.cgColor
       newLayer.borderWidth = 1
@@ -161,7 +161,7 @@ public class animatedShape : UIView {
   
   func createCircle(){
     let cirPath1 = UIBezierPath()
-    cirPath1.addArc(withCenter: CGPoint(x: self.center.x, y: self.center.y - 50), radius: 50, startAngle:CGFloat(M_PI) / -2, endAngle: CGFloat(M_PI) * 2 - (CGFloat(M_PI) / 2), clockwise: true)
+    cirPath1.addArc(withCenter: CGPoint(x: self.center.x, y: self.center.y - 100), radius: 100, startAngle:CGFloat(M_PI) / -2, endAngle: CGFloat(M_PI) * 2 - (CGFloat(M_PI) / 2), clockwise: true)
     
     let cirDot1 = makeDot(width: 5, height: 5)
     
@@ -178,7 +178,7 @@ public class animatedShape : UIView {
   }
   
   func createSquare(){
-    let recPoints = getPolyPoints(sides: 4, radius: 50, rotation: 0.25 * M_PI)
+    let recPoints = getPolyPoints(sides: 4, radius: 100, rotation: 0.25 * M_PI)
     
     let rectPath1 = createBezierPath(startingPoint: recPoints[0], lineSegPoints: [recPoints[1]])
     let rectPath2 = createBezierPath(startingPoint: recPoints[1], lineSegPoints: [recPoints[2]])
@@ -212,7 +212,7 @@ public class animatedShape : UIView {
   
   func createHexagon(){
     // Get the six points
-    let hexPoints = getPolyPoints(sides: 6, radius: 50, rotation: 0.5 * M_PI)
+    let hexPoints = getPolyPoints(sides: 6, radius: 100, rotation: 0.5 * M_PI)
     
     let hexPath1 = createBezierPath(startingPoint: hexPoints[0], lineSegPoints: [hexPoints[1], hexPoints[2]])
     let hexPath2 = createBezierPath(startingPoint: hexPoints[2], lineSegPoints: [hexPoints[3], hexPoints[4]])

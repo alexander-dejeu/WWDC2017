@@ -6,6 +6,12 @@ public enum airPodStyle{
 }
 public class AirPod : UIView {
   
+  public var style : airPodStyle = .left {
+    didSet {
+      setNeedsDisplay()
+    }
+  }
+  
   func drawLeftAirPod(){
     let strokeColor3 = UIColor(red: 0.005, green: 0.009, blue: 0.007, alpha: 1.000)
     let fillColor2 = UIColor(red: 0.005, green: 0.009, blue: 0.007, alpha: 1.000)
@@ -149,7 +155,6 @@ public class AirPod : UIView {
   }
   
   override public func draw(_ rect: CGRect) {
-    let style : airPodStyle = .left
     switch style{
     case .left: drawLeftAirPod()
     case .right : drawRightAirPod()
