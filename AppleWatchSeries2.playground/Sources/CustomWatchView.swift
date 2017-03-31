@@ -1,6 +1,18 @@
 import UIKit
 
 public class customWatchView : UIView{
+  var ringProgressView = MKRingProgressView()
+  var ringProgressView2 = MKRingProgressView()
+  var ringProgressView3 = MKRingProgressView()
+  
+  let activityRingGoal : Double = 490.0
+  let exerciseRingGoal : Double = 30.0
+  let standRingGoal : Double = 12.0
+  
+  var activityTotal : Double = 736.0
+  var exerciseTotal : Double = 64.0
+  var standTotal : Double = 13.0
+  
   
   override public init(frame : CGRect){
     super.init(frame: frame)
@@ -12,47 +24,82 @@ public class customWatchView : UIView{
     timeLabel.textAlignment = .left
     self.addSubview(timeLabel)
     
-    let activityLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 284, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: 736.0, duration: 12.0)
+    let activityLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 284, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: activityTotal, duration: 12.0)
     activityLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
     activityLabel.minimumScaleFactor = 0.5
     activityLabel.textAlignment = .right
     self.addSubview(activityLabel)
     
-    let excersizeLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 348.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: 64, duration: 12.0)
+    let excersizeLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 348.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: exerciseTotal, duration: 12.0)
     excersizeLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
     excersizeLabel.minimumScaleFactor = 0.5
     excersizeLabel.textAlignment = .right
     self.addSubview(excersizeLabel)
     
-    let standingLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 408.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: 13, duration: 12.0)
+    let standingLabel = incrementalLabel(frame: CGRect(x: 178.5, y: 408.75, width: self.frame.width - 178.5 - 53.5, height: 71), endValue: standTotal, duration: 12.0)
     standingLabel.font = UIFont.systemFont(ofSize: 53.333333334, weight: UIFontWeightMedium)
     standingLabel.minimumScaleFactor = 0.5
     standingLabel.textAlignment = .right
     self.addSubview(standingLabel)
     
     
-    let ringProgressView = MKRingProgressView(frame: CGRect(x: 30.5, y: 315.75, width: 156, height: 156))
-    ringProgressView.startColor = .red
-    ringProgressView.endColor = .magenta
+    ringProgressView = MKRingProgressView(frame: CGRect(x: 30.5, y: 315.75, width: 156, height: 156))
+    ringProgressView.startColor = #colorLiteral(red: 0.8811283112, green: 0, blue: 0.0722764805, alpha: 1)
+    ringProgressView.endColor = #colorLiteral(red: 0.9649361968, green: 0.1297230124, blue: 0.3876497149, alpha: 1)
     ringProgressView.ringWidth = 20
     ringProgressView.progress = 0.0
     self.addSubview(ringProgressView)
     
-    let ringProgressView2 = MKRingProgressView(frame: CGRect(x: 40.5, y: 325.75, width: 116, height: 116))
-    ringProgressView2.startColor = .green
-    ringProgressView2.endColor = .green
+    ringProgressView2 = MKRingProgressView(frame: CGRect(x: 40.5, y: 325.75, width: 116, height: 116))
+    ringProgressView2.startColor = #colorLiteral(red: 0.2136939466, green: 0.8621223569, blue: 0.005727462936, alpha: 1)
+    ringProgressView2.endColor = #colorLiteral(red: 0.6138017774, green: 0.9697924256, blue: 0.01211143006, alpha: 1)
     ringProgressView2.ringWidth = 20
-    ringProgressView2.progress = 0.20
+    ringProgressView2.progress = 0.0
     ringProgressView2.center = ringProgressView.center
     self.addSubview(ringProgressView2)
     
-    let ringProgressView3 = MKRingProgressView(frame: CGRect(x: 40.5, y: 325.75, width: 76, height: 76))
-    ringProgressView3.startColor = .blue
-    ringProgressView3.endColor = .cyan
+    ringProgressView3 = MKRingProgressView(frame: CGRect(x: 40.5, y: 325.75, width: 76, height: 76))
+    ringProgressView3.startColor = #colorLiteral(red: 0.002058682498, green: 0.7290638089, blue: 0.8833985925, alpha: 1)
+    ringProgressView3.endColor = #colorLiteral(red: 0.02357670851, green: 0.8923541903, blue: 0.8373907208, alpha: 1)
     ringProgressView3.ringWidth = 20
     ringProgressView3.progress = 0.0
     ringProgressView3.center = ringProgressView.center
     self.addSubview(ringProgressView3)
+    let displaylink = CADisplayLink(target: self,
+                                    selector: #selector(step))
+    displaylink.add(to: .current,
+                    forMode: .defaultRunLoopMode)
+  }
+  
+  var startDisplayLinkTime : Double = -1
+  var endTimeStamp : Double = -1
+  func step(displaylink: CADisplayLink) {
+    if startDisplayLinkTime == -1{
+      startDisplayLinkTime = displaylink.timestamp
+      endTimeStamp = 12 + startDisplayLinkTime
+    }
+    
+    let curTimeStamp = displaylink.timestamp
+    
+    let percentToEnd = (curTimeStamp - startDisplayLinkTime) / (endTimeStamp - startDisplayLinkTime)
+    
+    let activityPercent = (activityTotal * percentToEnd) / activityRingGoal
+    let exercisePercent = (exerciseTotal * percentToEnd) / exerciseRingGoal
+    var standPercent = ((standTotal * percentToEnd) / standRingGoal)
+    
+    let denominator : Double = 12
+    // Because we are rounding I am shifting it back by a half an hour :)
+    standPercent = round((standPercent- (1.0 / 24.0))*denominator )/denominator
+    print("Stand : \(standPercent)")
+  
+    ringProgressView.progress = activityPercent
+    ringProgressView2.progress = exercisePercent
+    ringProgressView3.progress = standPercent
+    
+    
+    if percentToEnd >= 1.0{
+      displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
+    }
     
   }
   

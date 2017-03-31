@@ -82,9 +82,9 @@ public class incrementalLabel : UILabel {
     }
     
     let curTimeStamp = displaylink.timestamp
-    print(curTimeStamp)
-    print(startTimeStamp)
-    print(endTimeStamp)
+//    print(curTimeStamp)
+//    print(startTimeStamp)
+//    print(endTimeStamp)
     let percentToEnd = (curTimeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
     
     if percentToEnd >= 1.0{
