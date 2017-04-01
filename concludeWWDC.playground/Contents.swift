@@ -141,6 +141,8 @@ class randomWalkDot : UIView {
 
 class concludeScene : UIView{
   
+  let dotAnimationSpeed : Double = 2.0
+  let imageOverlaySpeed : Double = 1.5
   var allDots : [sampleDot] = []
   var blueIndexs : [Int] = []
   var greenIndexs : [Int] = []
@@ -383,10 +385,119 @@ class concludeScene : UIView{
     for i in 0..<leafX.count {
       let curX = leafX[i]
       let curY = leafY[i]
-      UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
-        self.allDots[self.greenIndexs[i + 42]].frame = CGRect(x: curX, y: curY, width: 15, height: 15)
-      }, completion: nil)
+      if i == leafX.count - 1{
+        UIView.animate(withDuration: dotAnimationSpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+          self.allDots[self.greenIndexs[i + 42]].frame = CGRect(x: curX, y: curY, width: 15, height: 15)
+        }, completion: startAnimatingImages)
+      }
+      else{
+        UIView.animate(withDuration: dotAnimationSpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+          self.allDots[self.greenIndexs[i + 42]].frame = CGRect(x: curX, y: curY, width: 15, height: 15)
+        }, completion: nil)
+      }
     }
+  }
+  
+  func startAnimatingImages(status : Bool){
+    let blueStageImage = UIImageView(image: UIImage(named: "blueStageImage"))
+    blueStageImage.frame = CGRect(x: 114, y: 600, width: 372, height: 66)
+    blueStageImage.alpha = 0
+    self.addSubview(blueStageImage)
+    
+    let purpleStageImage = UIImageView(image : UIImage(named: "purpleStageImage"))
+    purpleStageImage.frame = CGRect(x: 114, y: 547, width: 372, height: 119)
+    purpleStageImage.alpha = 0
+    self.addSubview(purpleStageImage)
+    
+    let redStageImage = UIImageView(image : UIImage(named: "redStageImage"))
+    redStageImage.frame = CGRect(x: 114, y: 493, width: 372, height: 173)
+    redStageImage.alpha = 0
+    self.addSubview(redStageImage)
+    
+    let orangeStageImage = UIImageView(image : UIImage(named: "orangeStageImage"))
+    orangeStageImage.frame = CGRect(x: 114, y: 439, width: 372, height: 225)
+    orangeStageImage.alpha = 0
+    self.addSubview(orangeStageImage)
+  
+    let yellowStageImage = UIImageView(image : UIImage(named: "yellowStageImage"))
+    yellowStageImage.frame = CGRect(x: 114, y: 385, width: 372, height: 281)
+    yellowStageImage.alpha = 0
+    self.addSubview(yellowStageImage)
+    
+    let greenStageImage = UIImageView(image : UIImage(named: "greenStageImage"))
+    greenStageImage.frame = CGRect(x: 114, y: 226, width: 372, height: 440)
+    greenStageImage.alpha = 0
+    self.addSubview(greenStageImage)
+    
+    transitionFromDotsToImage(array: blueIndexs, image: blueStageImage, completionBlock: {
+      self.transitionFromDotsToImage(array: self.purpleIndexs, image: purpleStageImage, completionBlock:  {
+        self.transitionFromDotsToImage(array: self.redIndexs, image: redStageImage, completionBlock: {
+          self.transitionFromDotsToImage(array: self.orangeIndexs, image: orangeStageImage, completionBlock: {
+            self.transitionFromDotsToImage(array: self.yellowIndexs, image: yellowStageImage, completionBlock: {
+              self.transitionFromDotsToImage(array: self.greenIndexs, image: greenStageImage, completionBlock: {
+                print("Add the label!")
+                self.addThankYouLabel()
+              })
+            })
+          })
+        })
+      })
+    })
+  }
+  
+  func addThankYouLabel(){
+    // Thank you y cord 694
+    // SF Light 60
+    // T H A N K   Y O U
+    let thankYou = UILabel(frame: CGRect(x: 0, y: 694, width: self.frame.width, height: 72))
+    
+    
+    var myString:NSString = "T H A N K   Y O U"
+    var myMutableString = NSMutableAttributedString()
+    
+    myMutableString = NSMutableAttributedString(string: myString as String, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 60, weight: UIFontWeightLight)])
+    
+    myMutableString.addAttribute(NSForegroundColorAttributeName, value: blue, range: NSRange(location:0,length:1))
+    myMutableString.addAttribute(NSForegroundColorAttributeName, value: purple, range: NSRange(location:2,length:1))
+    myMutableString.addAttribute(NSForegroundColorAttributeName, value: red, range: NSRange(location:4,length:1))
+    myMutableString.addAttribute(NSForegroundColorAttributeName, value: orange, range: NSRange(location:6,length:1))
+    myMutableString.addAttribute(NSForegroundColorAttributeName, value: yellow, range: NSRange(location:8,length:1))
+    myMutableString.addAttribute(NSForegroundColorAttributeName, value: green, range: NSRange(location:12,length:5))
+    
+    
+    thankYou.attributedText = myMutableString
+    
+    thankYou.textAlignment = .center
+    thankYou.alpha = 0
+    self.addSubview(thankYou)
+    UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+      thankYou.alpha = 1
+    }, completion: nil)
+  }
+  func transitionFromDotsToImage(array: [Int], image : UIImageView, completionBlock: (() -> ())? = nil){
+    UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+      image.alpha = 1
+      
+    }, completion: nil)
+    
+    for i in 0..<array.count {
+      if i == array.count - 1{
+        UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+          self.allDots[array[i]].alpha = 0
+        }, completion: { boolean in
+          completionBlock!()
+        })
+      }
+      else{
+        UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+          self.allDots[array[i]].alpha = 0
+          
+        }, completion: nil)
+      }
+    }
+    // For all dots in array - Fade out
+    // at the same time have the image view fade in
+    
   }
   
 //  addHori(startingX: 172, startingY: 600, startingDotIndex: 0, count: 12, indexArray : blueIndexs)
@@ -397,12 +508,12 @@ class concludeScene : UIView{
     for i in 0..<count{
       let curX = startingX + CGFloat(Double(i) * (7.5 + 15))
       if i == count-1 {
-        UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: dotAnimationSpeed, delay: 0.3, options: [.curveEaseOut], animations: {
           self.allDots[indexArray[i + startingDotIndex]].frame = CGRect(x: curX, y: startingY, width: 15, height: 15)
         }, completion: completionBlock)
       }
       else{
-        UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: dotAnimationSpeed, delay: 0.3, options: [.curveEaseOut], animations: {
           
           self.allDots[indexArray[i + startingDotIndex]].frame = CGRect(x: curX, y: startingY, width: 15, height: 15)
         })
@@ -422,16 +533,11 @@ let h : CGFloat = 945
 var view = concludeScene(frame: CGRect(x: 0, y: 0, width: w, height: h))
 view.backgroundColor = .white
 PlaygroundPage.current.liveView = view
-let dotNote : sampleDot = sampleDot(frame: CGRect(x: 50, y: 50, width: 15, height: 15))
-view.allDots.append(dotNote)
-view.addSubview(dotNote)
 
 
 // 267 total dots!
 
-// Thank you y cord 694
-// SF Light 60
-// T H A N K   Y O U
+
 
 
 

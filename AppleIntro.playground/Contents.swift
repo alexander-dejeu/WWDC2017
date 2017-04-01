@@ -67,7 +67,7 @@ let WWDC2016Label = UILabel(frame: CGRect(x: 0, y: labelSpacing + greenLine.fram
 
 var myString:NSString = "W W D C 1 6"
 var myMutableString = NSMutableAttributedString()
-(107.0 / 2208.0) * view.frame.height
+//(107.0 / 2208.0) * view.frame.height
 myMutableString = NSMutableAttributedString(string: myString as String, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: (67.0 / 2208.0) * view.frame.height, weight: UIFontWeightThin)])
 
 myMutableString.addAttribute(NSForegroundColorAttributeName, value: green, range: NSRange(location:0,length:1))
