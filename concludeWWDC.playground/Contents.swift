@@ -307,6 +307,7 @@ class concludeScene : UIView{
   }
   
   func animatePurple(){
+    print("animate purple")
     // PurpleGroup 42 Dots
     // TopLeft - 141, 546...15
     // MidLeft - 153, 564...14
@@ -319,6 +320,7 @@ class concludeScene : UIView{
   }
   
   func animateRed(){
+    print("animate red")
     // RedGroup 44 Dots
     // TopLeft - 125, 493 ... 14
     // MidLeft - 129, 512 ... 15
@@ -326,29 +328,34 @@ class concludeScene : UIView{
     addHori(startingX: 125, startingY: 493, startingDotIndex: 0, count: 14, indexArray : redIndexs)
     addHori(startingX: 129, startingY: 512, startingDotIndex: 14, count: 15, indexArray : redIndexs)
     addHori(startingX: 138, startingY: 530, startingDotIndex: 29, count: 15, indexArray : redIndexs, completionBlock: { boolean in
-      
-      
+      self.animateOrange()
     })
   }
   
   func animateOrange(){
+    print("animate Orange")
     // OrangeGroup 42
     // TopLeft - 121, 439 ... 14
     // MidLeft - 120, 458 ... 14
     // BottomLeft - 122, 477 ... 14
-    addHori(startingX: 121, startingY: 439, startingDotIndex: 121, count: 14, indexArray : orangeIndexs)
-    addHori(startingX: 120, startingY: 458, startingDotIndex: 135, count: 14, indexArray : orangeIndexs)
-    addHori(startingX: 122, startingY: 477, startingDotIndex: 151, count: 14, indexArray : orangeIndexs)
+    addHori(startingX: 121, startingY: 439, startingDotIndex: 0, count: 14, indexArray : orangeIndexs)
+    addHori(startingX: 120, startingY: 458, startingDotIndex: 14, count: 14, indexArray : orangeIndexs)
+    addHori(startingX: 122, startingY: 477, startingDotIndex: 28, count: 14, indexArray : orangeIndexs, completionBlock: { boolean in
+      self.animateYellow()
+    })
   }
   
   func animateYellow(){
+    print("animate yellow")
     // YellowGroup 42
     // TopLeft - 135, 385 ... 14
     // MiddleLeft - 128, 404 ... 14
     // BottomLeft - 122, 423 ... 14
-    addHori(startingX: 135, startingY: 385, startingDotIndex: 165, count: 14, indexArray : yellowIndexs)
-    addHori(startingX: 128, startingY: 404, startingDotIndex: 179, count: 14, indexArray : yellowIndexs)
-    addHori(startingX: 122, startingY: 423, startingDotIndex: 193, count: 14, indexArray : yellowIndexs)
+    addHori(startingX: 135, startingY: 385, startingDotIndex: 0, count: 14, indexArray : yellowIndexs)
+    addHori(startingX: 128, startingY: 404, startingDotIndex: 14, count: 14, indexArray : yellowIndexs)
+    addHori(startingX: 122, startingY: 423, startingDotIndex: 28, count: 14, indexArray : yellowIndexs, completionBlock: { boolean in
+      self.animateGreen()
+    })
   }
   
   func animateGreen(){
@@ -359,12 +366,13 @@ class concludeScene : UIView{
     // PartialRight - 330, 340 ... 5
     // MinLeft - 205, 325 ... 2
     // Min Right - 365, 325 ... 2
-    addHori(startingX: 147, startingY: 370, startingDotIndex: 207, count: 14, indexArray : greenIndexs)
-    addHori(startingX: 161, startingY: 355, startingDotIndex: 221, count: 14, indexArray : greenIndexs)
-    addHori(startingX: 172, startingY: 340, startingDotIndex: 235, count: 5, indexArray : greenIndexs)
-    addHori(startingX: 330, startingY: 340, startingDotIndex: 240, count: 5, indexArray : greenIndexs)
-    addHori(startingX: 205, startingY: 325, startingDotIndex: 245, count: 2, indexArray : greenIndexs)
-    addHori(startingX: 365, startingY: 325, startingDotIndex: 247, count: 2, indexArray : greenIndexs)
+    addHori(startingX: 147, startingY: 370, startingDotIndex: 0, count: 14, indexArray : greenIndexs)
+    addHori(startingX: 161, startingY: 355, startingDotIndex: 14, count: 14, indexArray : greenIndexs)
+    addHori(startingX: 172, startingY: 340, startingDotIndex: 28, count: 5, indexArray : greenIndexs)
+    addHori(startingX: 330, startingY: 340, startingDotIndex: 33, count: 5, indexArray : greenIndexs)
+    addHori(startingX: 205, startingY: 325, startingDotIndex: 38, count: 2, indexArray : greenIndexs)
+    addHori(startingX: 365, startingY: 325, startingDotIndex: 40, count: 2, indexArray : greenIndexs)
+    animateLeaf()
   }
   
   func animateLeaf(){
@@ -388,11 +396,18 @@ class concludeScene : UIView{
   func addHori(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int, indexArray : [Int], completionBlock: ((Bool) -> ())? = nil){
     for i in 0..<count{
       let curX = startingX + CGFloat(Double(i) * (7.5 + 15))
-      UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
-        print("Starting dot index \(startingDotIndex)")
-        print("index : \(i + startingDotIndex)")
-        self.allDots[indexArray[i + startingDotIndex]].frame = CGRect(x: curX, y: startingY, width: 15, height: 15)
-      }, completion: completionBlock)
+      if i == count-1 {
+        UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+          self.allDots[indexArray[i + startingDotIndex]].frame = CGRect(x: curX, y: startingY, width: 15, height: 15)
+        }, completion: completionBlock)
+      }
+      else{
+        UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
+          
+          self.allDots[indexArray[i + startingDotIndex]].frame = CGRect(x: curX, y: startingY, width: 15, height: 15)
+        })
+      }
+      
     }
   }
 }
