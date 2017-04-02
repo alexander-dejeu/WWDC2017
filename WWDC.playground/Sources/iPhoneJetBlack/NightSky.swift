@@ -1,7 +1,7 @@
 import UIKit
 
 open class NightSky : UIView {
-  var done = false
+  public var done = false
   
   var dotArray : [UIView] = []
   var leftStartingX : CGFloat = 1
@@ -73,7 +73,7 @@ open class NightSky : UIView {
     
     for i in 0..<533{
       let randX = Int(arc4random_uniform(UInt32(self.frame.width)))
-      let randY = Int(arc4random_uniform(UInt32(self.frame.width)))
+      let randY = Int(arc4random_uniform(UInt32(self.frame.height)))
       
       let newDot : UIView = UIView(frame: CGRect(x: Double(randX), y: Double(randY), width: 3.75, height: 3.75))
       newDot.backgroundColor = .white

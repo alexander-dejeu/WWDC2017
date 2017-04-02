@@ -1,8 +1,8 @@
 import UIKit
 
 extension Cloud {
-  func moveCloudAnimation(from dir : dir, shift : CGFloat){
-    UIView.animate(withDuration: 2.5, animations: {
+  func moveCloudAnimation(from dir : dir, shift : CGFloat, delay: Double){
+    UIView.animate(withDuration: 2.5, delay: delay, animations: {
       switch dir {
       case .left:
         self.frame = CGRect(x: self.frame.minX + shift, y: self.frame.minY, width: self.frame.width, height: self.frame.height)
@@ -34,6 +34,41 @@ public enum dir{
 }
 
 open class AirPodScene : UIView {
+  
+  var miniSun = UIView()
+  public func addSunAndAnimate(){
+    let startingRadius = self.frame.width / 2.0
+    
+    miniSun.frame = CGRect(x: startingRadius, y: self.frame.height - startingRadius, width: startingRadius * 2.0, height: startingRadius * 2.0)
+    miniSun.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
+    miniSun.clipsToBounds = true
+    miniSun.layer.cornerRadius = startingRadius
+    miniSun.alpha = 0
+    
+    self.addSubview(miniSun)
+    UIView.animate(withDuration: 1.0, animations: {
+      self.miniSun.alpha = 1.0
+    }, completion: { boolean in
+      UIView.animate(withDuration: 3.0, animations: {
+        self.miniSun.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
+      }, completion: { boolean in
+        self.start()
+      })
+    })
+    
+  }
+  
+  func start(){
+    self.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
+    miniSun.removeFromSuperview()
+    print("start animation")
+    let displaylink = CADisplayLink(target: self,
+                                    selector: #selector(animateClouds))
+    displaylink.add(to: .current,
+                    forMode: .defaultRunLoopMode)
+  }
+  
+  public var done = false
   
   var group1L : [Cloud] = []
   var group2L : [Cloud] = []
@@ -108,11 +143,6 @@ open class AirPodScene : UIView {
     self.addSubview(longRightCloud)
     
     sendCloudsToStartingPosition()
-    
-    let displaylink = CADisplayLink(target: self,
-                                    selector: #selector(animateClouds))
-    displaylink.add(to: .current,
-                    forMode: .defaultRunLoopMode)
   }
   
   var startDisplayLinkTime : Double = -1
@@ -142,31 +172,35 @@ open class AirPodScene : UIView {
     if percentToEnd >= 0.0 && stageOneFlag == -1{
       stageOneFlag = 1
       print("animate stage one!")
-      for cloud in group1L{
-        cloud.moveCloudAnimation(from: .left, shift: self.frame.width)
+      for i in 0..<group1L.count{
+        group1L[i].moveCloudAnimation(from: .left, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group1L.count)) * Double(i))
       }
-      for cloud in group1R{
-        cloud.moveCloudAnimation(from: .right, shift: self.frame.width)
+      for i in 0..<group1R.count{
+        let halfStep = ((8.0 / 3.0 / Double(group1R.count))) / 2.0
+        group1R[i].moveCloudAnimation(from: .right, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group1R.count)) * Double(i) + halfStep)
       }
     }
     if percentToEnd >= 0.333333 && stageTwoFlag == -1{
       stageTwoFlag = 1
       print("animate stage two!")
-      for cloud in group2L{
-        cloud.moveCloudAnimation(from: .left, shift: self.frame.width)
+      for i in 0..<group2L.count{
+        group2L[i].moveCloudAnimation(from: .left, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group2L.count)) * Double(i))
       }
-      for cloud in group2R{
-        cloud.moveCloudAnimation(from: .right, shift: self.frame.width)
+      for i in 0..<group2R.count{
+        let halfStep = ((8.0 / 3.0 / Double(group2R.count))) / 2.0
+        group2R[i].moveCloudAnimation(from: .right, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group2R.count)) * Double(i) + halfStep)
       }
     }
     if percentToEnd >= 0.666666 && stageThreeFlag == -1{
       stageThreeFlag = 1
       print("Animate stage three!")
-      for cloud in group3L{
-        cloud.moveCloudAnimation(from: .left, shift: self.frame.width)
+      for i in 0..<group3L.count{
+        group3L[i].moveCloudAnimation(from: .left, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group3L.count)) * Double(i))
+
       }
-      for cloud in group3R{
-        cloud.moveCloudAnimation(from: .right, shift: self.frame.width)
+      for i in 0..<group3R.count{
+        group3R[i].moveCloudAnimation(from: .right, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group3R.count)) * Double(i))
+
       }
     }
   }

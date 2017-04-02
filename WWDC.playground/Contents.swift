@@ -5,8 +5,11 @@ import PlaygroundSupport
 
 open class AYearAtApple : UIView {
   
-  var appleWatchScene = watchScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
+  var appleWatchScene = WatchScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   let night = NightSky(frame : CGRect(x: 0, y: 0, width: 599, height: 945))
+  var airpodScene = AirPodScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
+  var concludeScene = ConcludeScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
+  
   
   override public init(frame : CGRect){
     super.init(frame: frame)
@@ -19,6 +22,14 @@ open class AYearAtApple : UIView {
     night.alpha = 0
     self.addSubview(night)
     
+    airpodScene.backgroundColor = .clear
+    self.addSubview(airpodScene)
+    
+    concludeScene.backgroundColor = .white
+    concludeScene.frame = CGRect(x: 0 - self.frame.width, y: 0, width: self.frame.width, height: self.frame.height)
+    self.addSubview(concludeScene)
+    
+    
     let displaylink = CADisplayLink(target: self,
                                     selector: #selector(step))
     displaylink.add(to: .current,
@@ -29,15 +40,30 @@ open class AYearAtApple : UIView {
   var startDisplayLinkTime : Double = -1
   var endTimeStamp : Double = -1
   
+  var nightStarted = false
+  var airpodsStarted = false
+  var concludeStarted = false
+  
   func step(displaylink: CADisplayLink) {
-    if appleWatchScene.done {
-
+    if appleWatchScene.done && !nightStarted{
+      nightStarted = true
       // Fade out the actual watch
       appleWatchScene.fadeOutWatch()
       iPhoneTransition()
       // Have the night sky slide up and fade in
     }
     
+    if night.done && !airpodsStarted {
+      print("Night done")
+      airpodsStarted = true
+      airpodScene.addSunAndAnimate()
+    }
+    
+    if airpodScene.done && !concludeStarted{
+      concludeStarted = true
+      concludeTransition()
+      
+    }
     
 //    if startDisplayLinkTime == -1{
 //      startDisplayLinkTime = displaylink.timestamp
@@ -58,6 +84,18 @@ open class AYearAtApple : UIView {
 //    if percentToEnd >= 1.0{
 //      displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
 //    }
+    
+  }
+  
+  func concludeTransition(){
+    UIView.animate(withDuration: 1.5, animations: {
+      self.concludeScene.frame = CGRect(x: 0, y: 0, width: self.concludeScene.frame.width, height: self.concludeScene.frame.height)
+    }, completion: { boolean in
+      self.concludeScene.start()
+    })
+  }
+  
+  func airpodTransition(){
     
   }
   
@@ -91,13 +129,10 @@ PlaygroundPage.current.liveView = view
 
 
 
-
-
 //var jetBlackiPhoneScene = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
 //
 //
-//var airpodScene = AirPodScene(frame: CGRect(x: 0, y: 0, width: w, height: h))
-//airpodScene.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
+
 //PlaygroundPage.current.liveView = airpodScene
 
 

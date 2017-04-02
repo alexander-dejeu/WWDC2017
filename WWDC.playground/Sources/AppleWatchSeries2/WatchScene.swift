@@ -1,6 +1,6 @@
 import UIKit
 
-public class watchScene : UIView, CAAnimationDelegate{
+public class WatchScene : UIView, CAAnimationDelegate{
   var watchView = customWatchView()
   public var sunView = UIView()
   public var done = false
