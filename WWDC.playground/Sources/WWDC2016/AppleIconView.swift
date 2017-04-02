@@ -1,11 +1,23 @@
 import UIKit
 
 public class AppleIconView: UIView {
-  
+  //MARK: - Properties
   var leafPath: UIBezierPath!
   var applePath: UIBezierPath!
+  
+  
+  //MARK: - Lifecycle
+  override public func draw(_ rect: CGRect) {
+    leafPath = createLeafPath(height: rect.height, width: rect.width)
+    applePath = createApplePath(height: rect.height, width: rect.width)
+    UIColor.white.setStroke()
+    leafPath.stroke()
+    applePath.stroke()
+  }
+  
+  
+  //MARK: - Helpers
   public func addMask(){
-    print("nothing to do")
     let combinePath = UIBezierPath()
     let newLeaf = createLeafPath(height: self.frame.height, width: self.frame.width)
     let newApple = createApplePath(height: self.frame.height, width: self.frame.width)
@@ -15,19 +27,9 @@ public class AppleIconView: UIView {
     let shapeLayerMask = CAShapeLayer()
     shapeLayerMask.path = combinePath.cgPath
     shapeLayerMask.backgroundColor = #colorLiteral(red: 0.8803832531, green: 0.2371731997, blue: 0.2013332248, alpha: 1).cgColor
-    print("I feel that the self fucks up")
     self.layer.mask = shapeLayerMask
-    print("wrong")
   }
-  override public func draw(_ rect: CGRect) {
-    
-    leafPath = createLeafPath(height: rect.height, width: rect.width)
-    applePath = createApplePath(height: rect.height, width: rect.width)
-    
-    UIColor.white.setStroke()
-    leafPath.stroke()
-    applePath.stroke()
-  }
+  
   func createLeafPath(height h: CGFloat, width w : CGFloat) -> UIBezierPath {
     
     let leafPathClipper = UIBezierPath()

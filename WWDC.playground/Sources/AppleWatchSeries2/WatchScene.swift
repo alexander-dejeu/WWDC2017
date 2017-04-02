@@ -1,7 +1,7 @@
 import UIKit
 
 public class WatchScene : UIView, CAAnimationDelegate{
-  var watchView = customWatchView()
+  //MARK: - Public Properties
   public var sunView = UIView()
   public var done = false
   public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
@@ -11,6 +11,12 @@ public class WatchScene : UIView, CAAnimationDelegate{
     }
   }
   
+  
+  //MARK: - Properties
+  var watchView = customWatchView()
+  
+  
+  //MARK: - Public Helpers
   public func start(){
     watchView = customWatchView(frame: CGRect(x: 0, y: 0, width: 344.25, height: 633))
     watchView.backgroundColor = .clear
@@ -58,25 +64,12 @@ public class WatchScene : UIView, CAAnimationDelegate{
         watchTitle.alpha = 1
       })
     })
-    
   }
   
   public func fadeOutWatch(){
     UIView.animate(withDuration: 1.0, animations: {
       self.watchView.alpha = 0
     })
-  }
-  
-  override public init(frame: CGRect){
-    super.init(frame: frame)
-  }
-  
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-  override public func draw(_ rect: CGRect){
-    
   }
 }
 

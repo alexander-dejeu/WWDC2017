@@ -13,13 +13,17 @@ public enum cloudStyle {
   case indentedBottomCloud
   case largeFilledCloud
 }
+
 public class Cloud : UIView {
+  //MARK: - Public Properties
   public var cloudType : cloudStyle = .filledSmallCloud {
     didSet {
       setNeedsDisplay()
     }
   }
   
+  
+  //MARK: - Lifecycle
   override public init(frame: CGRect){
     super.init(frame: frame)
     self.backgroundColor = .clear
@@ -29,6 +33,27 @@ public class Cloud : UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  override public func draw(_ rect: CGRect){
+    
+    switch cloudType{
+    case .filledSmallCloud: drawFilledSmallCloud()
+    case .partialLeftAndFullRightCloud: drawPartialLeftAndFullRightCloud()
+    case .basicOutlineCloud: drawBasicOutlineCloud()
+      
+    case .rightAirpodCloud: drawRightAirpodCloud()
+    case .leftAirpodCloud: drawLeftAirpodCloud()
+      
+    case.bigBasicFilledCloud: drawBigBasicFilledCloud()
+    case .outlinedCloud : drawOutlinedCloud()
+    case .outlinedLongCloud: drawOutlinedLongCloud()
+    case .midLongCloud: drawMidLongCloud()
+    case .indentedBottomCloud : drawIndentedBottomCloud()
+    case .largeFilledCloud : drawLargeFilledCloud()
+    }
+  }
+  
+  
+  //MARK: - Helpers
   func drawFilledSmallCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -53,6 +78,7 @@ public class Cloud : UIView {
     fillColor.setFill()
     bezierPath.fill()
   }
+  
   func drawPartialLeftAndFullRightCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -81,7 +107,6 @@ public class Cloud : UIView {
     bezierPath.usesEvenOddFillRule = true
     fillColor.setFill()
     bezierPath.fill()
-    
     
     //// Bezier 2 Drawing
     let bezier2Path = UIBezierPath()
@@ -117,6 +142,7 @@ public class Cloud : UIView {
     fillColor.setFill()
     bezier2Path.fill()
   }
+  
   func drawBasicOutlineCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -153,8 +179,8 @@ public class Cloud : UIView {
     bezierPath.usesEvenOddFillRule = true
     fillColor.setFill()
     bezierPath.fill()
-    
   }
+  
   func drawRightAirpodCloud(){
     let strokeColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
@@ -177,7 +203,6 @@ public class Cloud : UIView {
     fillColor.setFill()
     bezierPath.fill()
     
-    
     //// Bezier 2 Drawing
     let bezier2Path = UIBezierPath()
     bezier2Path.move(to: CGPoint(x: 6.24, y: 56.75))
@@ -197,7 +222,6 @@ public class Cloud : UIView {
     bezier2Path.lineJoinStyle = .round
     bezier2Path.stroke()
     
-    
     //// Bezier 3 Drawing
     let bezier3Path = UIBezierPath()
     bezier3Path.move(to: CGPoint(x: 264.99, y: 107.38))
@@ -212,7 +236,6 @@ public class Cloud : UIView {
     bezier3Path.usesEvenOddFillRule = true
     fillColor.setFill()
     bezier3Path.fill()
-    
     
     //// Bezier 4 Drawing
     let bezier4Path = UIBezierPath()
@@ -231,6 +254,7 @@ public class Cloud : UIView {
     bezier4Path.lineJoinStyle = .round
     bezier4Path.stroke()
   }
+  
   func drawLeftAirpodCloud(){
     let strokeColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
@@ -260,7 +284,6 @@ public class Cloud : UIView {
     fillColor.setFill()
     bezierPath.fill()
     
-    
     //// Bezier 2 Drawing
     let bezier2Path = UIBezierPath()
     bezier2Path.move(to: CGPoint(x: 29.12, y: 119.12))
@@ -287,6 +310,7 @@ public class Cloud : UIView {
     bezier2Path.lineJoinStyle = .round
     bezier2Path.stroke()
   }
+  
   func drawBigBasicFilledCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -309,6 +333,7 @@ public class Cloud : UIView {
     fillColor.setFill()
     bezierPath.fill()
   }
+  
   func drawOutlinedCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -363,6 +388,7 @@ public class Cloud : UIView {
     fillColor.setFill()
     bezierPath.fill()
   }
+  
   func drawOutlinedLongCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -426,9 +452,8 @@ public class Cloud : UIView {
     bezierPath.close()
     fillColor.setFill()
     bezierPath.fill()
-    
-    
   }
+  
   func drawMidLongCloud(){
     let context = UIGraphicsGetCurrentContext()!
     
@@ -498,8 +523,9 @@ public class Cloud : UIView {
     bezierPath.close()
     fillColor.setFill()
     bezierPath.fill()
-    
-    context.restoreGState()  }
+    context.restoreGState()
+  }
+  
   func drawIndentedBottomCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -551,8 +577,8 @@ public class Cloud : UIView {
     bezierPath.close()
     fillColor.setFill()
     bezierPath.fill()
-    
   }
+  
   func drawLargeFilledCloud(){
     let fillColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
     
@@ -576,25 +602,5 @@ public class Cloud : UIView {
     bezierPath.usesEvenOddFillRule = true
     fillColor.setFill()
     bezierPath.fill()
-    
-  }
-  
-  override public func draw(_ rect: CGRect){
-    
-    switch cloudType{
-    case .filledSmallCloud: drawFilledSmallCloud()
-    case .partialLeftAndFullRightCloud: drawPartialLeftAndFullRightCloud()
-    case .basicOutlineCloud: drawBasicOutlineCloud()
-      
-    case .rightAirpodCloud: drawRightAirpodCloud()
-    case .leftAirpodCloud: drawLeftAirpodCloud()
-      
-    case.bigBasicFilledCloud: drawBigBasicFilledCloud()
-    case .outlinedCloud : drawOutlinedCloud()
-    case .outlinedLongCloud: drawOutlinedLongCloud()
-    case .midLongCloud: drawMidLongCloud()
-    case .indentedBottomCloud : drawIndentedBottomCloud()
-    case .largeFilledCloud : drawLargeFilledCloud()
-    }
   }
 }

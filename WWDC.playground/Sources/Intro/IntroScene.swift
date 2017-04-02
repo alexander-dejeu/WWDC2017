@@ -1,9 +1,11 @@
 import UIKit
 
 open class IntroScene : UIView{
-  
+  //MARK: - Private Properties
   public var done = false
   
+  
+  //MARK: - Lifecycle
   public override init(frame: CGRect){
     super.init(frame: frame)
     self.backgroundColor = .white
@@ -13,6 +15,8 @@ open class IntroScene : UIView{
     fatalError("init(coder:) has not been implemented")
   }
   
+  
+  //MARK: Public Helpers
   public func start(){
     let hello = coolUILabel(frame: CGRect(x: 132, y: 431, width: 100, height: 100), text: "hello")
     let world = coolUILabel(frame: CGRect(x: 100, y: 0, width: 100, height: 100), text: "world,")
@@ -62,7 +66,7 @@ open class IntroScene : UIView{
     let groupEleven : [coolUILabel] = [exception]
     
     let so = coolUILabel(frame: CGRect(x: 28, y: 431, width: 100, height: 100), text: "So")
-    let lets = coolUILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 100), text: "lets")
+    let lets = coolUILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 100), text: "let's")
     let take = coolUILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 100), text: "take")
     let a = coolUILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 100), text: "a")
     let look = coolUILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 100), text: "look")
@@ -106,9 +110,10 @@ open class IntroScene : UIView{
         })
       })
     })
-
   }
   
+  
+  //MARK: - Helpers
   func animateGroup(group : [coolUILabel], closure : @escaping ()->()?){
     var delayBuildup = 0.0
     
@@ -185,10 +190,7 @@ open class IntroScene : UIView{
             group[i].alpha = 1
           })
         }
-        
       }
     }
   }
 }
-
-

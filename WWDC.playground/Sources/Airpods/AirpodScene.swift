@@ -34,42 +34,12 @@ public enum dir{
 }
 
 open class AirPodScene : UIView {
-  
-  var miniSun = UIView()
-  public func addSunAndAnimate(){
-    let startingRadius = self.frame.width / 2.0
-    
-    miniSun.frame = CGRect(x: startingRadius, y: self.frame.height - startingRadius, width: startingRadius * 2.0, height: startingRadius * 2.0)
-    miniSun.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
-    miniSun.clipsToBounds = true
-    miniSun.layer.cornerRadius = startingRadius
-    miniSun.alpha = 0
-    
-    self.addSubview(miniSun)
-    UIView.animate(withDuration: 1.0, delay : 1.0, animations: {
-      self.miniSun.alpha = 1.0
-    }, completion: { boolean in
-      UIView.animate(withDuration: 3.0, animations: {
-        self.miniSun.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
-      }, completion: { boolean in
-        self.start()
-      })
-    })
-    
-  }
-  
-  func start(){
-    self.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
-    miniSun.removeFromSuperview()
-    
-    let displaylink = CADisplayLink(target: self,
-                                    selector: #selector(animateClouds))
-    displaylink.add(to: .current,
-                    forMode: .defaultRunLoopMode)
-  }
-  
+  //MARK: - Public Properties
   public var done = false
   
+  
+  //MARK: - Properties
+  var miniSun = UIView()
   var group1L : [Cloud] = []
   var group2L : [Cloud] = []
   var group3L : [Cloud] = []
@@ -96,7 +66,6 @@ open class AirPodScene : UIView {
   let rightAirpodFinalX : CGFloat = 317
   let rightAirpodFinalY : CGFloat = 767
   
-  
   let smallCloud : Cloud = Cloud(frame : CGRect(x: 36, y: 32.25, width: 125.25, height: 78))
   let doubleCloud : Cloud = Cloud(frame : CGRect(x: 366.75, y: 33, width: 213, height: 105))
   let singleCenterCloud : Cloud = Cloud(frame: CGRect(x: 198.75, y: 75.75, width: 172.5, height: 104.25))
@@ -109,10 +78,23 @@ open class AirPodScene : UIView {
   let tripleBumpCloud : Cloud = Cloud(frame: CGRect(x: 361.5, y: 354.75, width: 216, height: 141.75))
   let largestCloud : Cloud = Cloud(frame: CGRect(x: 177, y: 354.75, width: 252, height: 156))
   
-  
   let leftAirPodCloud : Cloud = Cloud(frame: CGRect(x: -123.24, y: 241.88, width: 271.25, height: 126))
   let rightAirPodCloud : Cloud = Cloud(frame: CGRect(x: 406.5, y: 110.25, width: 271.25, height: 126))
   
+  var startDisplayLinkTime : Double = -1
+  var endTimeStamp : Double = 0
+  var stageOneFlag = -1
+  var stageTwoFlag = -1
+  var stageThreeFlag = -1
+  
+  var moveAndRotateAirpodsFlag = -1
+  var transformToDetailAirPodFlag = -1
+  var moveToFinalLocationFlag = -1
+  
+  var firstRun = -1
+  
+  
+  //MARK: - Lifecycle
   override public init(frame : CGRect){
     super.init(frame: frame)
     
@@ -127,7 +109,6 @@ open class AirPodScene : UIView {
     
     leftAirPodCloud.cloudType = .leftAirpodCloud
     rightAirPodCloud.cloudType = .rightAirpodCloud
-    
     
     self.addSubview(smallCloud)
     self.addSubview(doubleCloud)
@@ -145,11 +126,21 @@ open class AirPodScene : UIView {
     sendCloudsToStartingPosition()
   }
   
-  var startDisplayLinkTime : Double = -1
-  var endTimeStamp : Double = 0
-  var stageOneFlag = -1
-  var stageTwoFlag = -1
-  var stageThreeFlag = -1
+  required public init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  
+  //MARK: - Helpers
+  func start(){
+    self.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
+    miniSun.removeFromSuperview()
+    
+    let displaylink = CADisplayLink(target: self,
+                                    selector: #selector(animateClouds))
+    displaylink.add(to: .current,
+                    forMode: .defaultRunLoopMode)
+  }
   
   func animateClouds(displaylink: CADisplayLink) {
     if startDisplayLinkTime == -1{
@@ -204,12 +195,6 @@ open class AirPodScene : UIView {
       }
     }
   }
-  
-  var moveAndRotateAirpodsFlag = -1
-  var transformToDetailAirPodFlag = -1
-  var moveToFinalLocationFlag = -1
-  
-  var firstRun = -1
   
   func animateAirpodPath(displaylink: CADisplayLink) {
     var detailLeftPod = AirPod()
@@ -296,6 +281,7 @@ open class AirPodScene : UIView {
       self.rightAirPodCloud.frame = CGRect(x: self.rightAirpodRotatedX, y: self.rightAirpodRotatedY, width: self.rightAirPodCloud.frame.width, height: self.rightAirPodCloud.frame.height)
     })
   }
+  
   func sendCloudsToStartingPosition(){
     let w = self.frame.width
     group1L = [doubleCloud, bigFillCloud]
@@ -321,9 +307,26 @@ open class AirPodScene : UIView {
     longRightCloud.shiftCloudToStarting(dir: .right, shift: w)
   }
   
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+  //MARK: - Public Helpers
+  public func addSunAndAnimate(){
+    let startingRadius = self.frame.width / 2.0
+    
+    miniSun.frame = CGRect(x: startingRadius, y: self.frame.height - startingRadius, width: startingRadius * 2.0, height: startingRadius * 2.0)
+    miniSun.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
+    miniSun.clipsToBounds = true
+    miniSun.layer.cornerRadius = startingRadius
+    miniSun.alpha = 0
+    
+    self.addSubview(miniSun)
+    UIView.animate(withDuration: 1.0, delay : 1.0, animations: {
+      self.miniSun.alpha = 1.0
+    }, completion: { boolean in
+      UIView.animate(withDuration: 3.0, animations: {
+        self.miniSun.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
+      }, completion: { boolean in
+        self.start()
+      })
+    })
   }
-  
 }
 

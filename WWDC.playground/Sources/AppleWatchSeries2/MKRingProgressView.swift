@@ -299,7 +299,6 @@ open class MKRingProgressLayer: CALayer {
     
     
     // Draw solid arc
-    
     if angle > maxAngle {
       
       let offset = angle - maxAngle
@@ -314,8 +313,6 @@ open class MKRingProgressLayer: CALayer {
       ctx.translateBy(x: -circleRect.midX, y: -circleRect.midY)
       
     }
-    
-    
     // Draw shadow
     
     ctx.saveGState()
@@ -347,9 +344,7 @@ open class MKRingProgressLayer: CALayer {
     
     
     // Draw gradient arc
-    
     ctx.saveGState()
-    
     ctx.addPath(CGPath(__byStroking: arc1Path.cgPath,
                        transform: nil,
                        lineWidth: w,
@@ -357,14 +352,8 @@ open class MKRingProgressLayer: CALayer {
                        lineJoin: progressStyle.lineJoin,
                        miterLimit: 0)!)
     ctx.clip()
-    
     ctx.draw(gradientImage(), in: circleRect.insetBy(dx: -w/2, dy: -w/2))
-    
     ctx.restoreGState()
-    
-    
-    ///////
-    
     let img = UIGraphicsGetImageFromCurrentImageContext()!.cgImage!
     UIGraphicsEndImageContext()
     

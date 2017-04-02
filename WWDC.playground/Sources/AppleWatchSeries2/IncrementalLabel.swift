@@ -1,7 +1,7 @@
 import UIKit
 
 public class incrementalLabel : UILabel {
-  
+  //MARK : - Properties
   var counter : Double = 0
   var timer = Timer()
   
@@ -11,16 +11,14 @@ public class incrementalLabel : UILabel {
   var requiredSeconds : Double = 0
   var timePerSec : Double = 1
   var duration: Double = 1
+  var startTimeStamp : Double = -1
+  var endTimeStamp : Double = 1
   
   var endValue : Double = 0
   var labelValue : Double = -1
   
   
-  override public init(frame: CGRect) {
-    super.init(frame: frame)
-    
-  }
-  
+  //MARK: - LifeCycle
   public init(frame : CGRect, endValue : Double, duration : Double){
     super.init(frame: frame)
     createDisplayLinkForActLabels()
@@ -49,15 +47,8 @@ public class incrementalLabel : UILabel {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setProperties(borderWidth: Float, borderColor: UIColor) {
-    //    self.layer.borderWidth = CGFloat(borderWidth)
-    //    self.layer.borderColor = borderColor.CGColor
-  }
   
-  
-  var startTimeStamp : Double = -1
-  var endTimeStamp : Double = 1
-  
+  //MARK: - Helpers
   func createDisplayLink() {
     let displaylink = CADisplayLink(target: self,
                                     selector: #selector(step))
@@ -82,9 +73,6 @@ public class incrementalLabel : UILabel {
     }
     
     let curTimeStamp = displaylink.timestamp
-//    print(curTimeStamp)
-//    print(startTimeStamp)
-//    print(endTimeStamp)
     let percentToEnd = (curTimeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
     
     if percentToEnd >= 1.0{
@@ -92,8 +80,6 @@ public class incrementalLabel : UILabel {
     }
     
     labelValue = endValue * percentToEnd
-    
-//    print(percentToEnd)
     self.text = "\(Int(labelValue))"
     
   }
@@ -104,22 +90,14 @@ public class incrementalLabel : UILabel {
       endTimeStamp = duration + startTimeStamp
     }
     let curTimeStamp = displaylink.timestamp
-    
-    
     let percentToEnd = (curTimeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
-//    print(percentToEnd)
-    
     if percentToEnd >= 1.0{
       displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
     }
     let totalSec : Double = endTimeDate - startTimeSec
     let shiftTime = percentToEnd * totalSec
-    
-    
     let curTime = Date(timeIntervalSince1970: TimeInterval(Double(startTimeSec) + shiftTime))
-    
     self.text = dateFormatter.string(from: curTime)
-    
   }
 }
 

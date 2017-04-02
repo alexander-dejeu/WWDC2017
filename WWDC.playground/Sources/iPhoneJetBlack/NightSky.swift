@@ -1,8 +1,10 @@
 import UIKit
 
 open class NightSky : UIView {
+  //MARK: - Public Properties
   public var done = false
   
+  //MARK: - Private Properties
   var dotArray : [UIView] = []
   var leftStartingX : CGFloat = 1
   var bothStartingY : CGFloat = 1
@@ -30,7 +32,11 @@ open class NightSky : UIView {
   var microphoneStartingX : CGFloat = 1
   var microphoneStartingY : CGFloat = 1
   
+  var startDisplayLinkTime : Double = -1
+  var endTimeStamp : Double = 0
+  var viewsAddedCounter = 0
   
+  //MARK: - Lifecycle
   override public init(frame: CGRect) {
     super.init(frame: frame)
     self.backgroundColor = #colorLiteral(red: 0, green: 0.003921568627, blue: 0.1215686275, alpha: 1)
@@ -62,9 +68,13 @@ open class NightSky : UIView {
     
     microphoneStartingX = 0.4983305509 * w
     microphoneStartingY = 0.0873015873 * h
-    
   }
   
+  required public init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  //MARK: - Public Helpers
   public func start(){
     let displaylink = CADisplayLink(target: self,
                                     selector: #selector(step))
@@ -81,18 +91,11 @@ open class NightSky : UIView {
       newDot.layer.cornerRadius = newDot.frame.width / 2.0
       
       dotArray.append(newDot)
-      
     }
   }
   
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
   
-  var startDisplayLinkTime : Double = -1
-  var endTimeStamp : Double = 0
-  var viewsAddedCounter = 0
-  
+  //MARK: - Helpers
   func step(displaylink: CADisplayLink) {
     if startDisplayLinkTime == -1{
       startDisplayLinkTime = displaylink.timestamp
@@ -162,9 +165,6 @@ open class NightSky : UIView {
     self.addSubview(jetBlackLabel)
     jetBlackLabel.frame = CGRect(x: 43.5, y: 826 + 100, width: jetBlackLabel.frame.width, height: jetBlackLabel.frame.height)
     
-    
-    
-    
     for i in startingDotIndex..<startingDotIndex+count{
       let curX = allXPoints[i - startingDotIndex] * self.frame.width
       let curY = allYPoints[i - startingDotIndex] * self.frame.height
@@ -233,7 +233,5 @@ open class NightSky : UIView {
         self.dotArray[i].frame = CGRect(x: curX, y: curY, width: 3.75, height: 3.75)
       }, completion: nil)
     }
-    
-    
   }
 }

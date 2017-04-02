@@ -3,8 +3,11 @@
 import UIKit
 
 open class WWDC2016Scene : UIView {
-  
+  //MARK: - Public Vars
   public var done = false
+  
+  
+  //MARKL - Properties
   let background = #colorLiteral(red: 0.1560676694, green: 0.163968116, blue: 0.2117111683, alpha: 1)
   let blue = #colorLiteral(red: 0.008550111204, green: 0.6733478904, blue: 0.6374569535, alpha: 1)
   let red = #colorLiteral(red: 0.8803832531, green: 0.2371731997, blue: 0.2013332248, alpha: 1)
@@ -25,6 +28,8 @@ open class WWDC2016Scene : UIView {
   var purpleLine = UIView()
   var greenLine = UIView()
 
+  
+  //MARK: - Lifecycle
   override public init(frame: CGRect){
     super.init(frame: frame)
     self.backgroundColor = backgroundColor
@@ -54,10 +59,14 @@ open class WWDC2016Scene : UIView {
     self.addSubview(greenLine)
   }
   
+  required public init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  
+  //MARK: - Public Helpers
   public func start(){
-    print("we start")
     UIView.animate(withDuration: 2.0, animations : {
-      print("yeah we in")
       self.blueLine.frame = CGRect(x: self.blueLine.frame.minX, y: self.blueLine.frame.minY, width: self.bounds.width, height: self.blueLine.frame.height)
       
       self.redLine.frame = CGRect(x: self.redLine.frame.minX, y: self.redLine.frame.minY, width: self.bounds.width, height: self.redLine.frame.height)
@@ -70,29 +79,21 @@ open class WWDC2016Scene : UIView {
     }, completion : { boolean in
         self.done = true
     })
-    print("finished the bars")
     addWWDCLabel()
-    print("added labels")
-    
     addApple()
-    print("added Apple")
-
   }
   
+  
+  //MARK: - Helpers
   func addApple(){
     let appleRatio : CGFloat =  1102.0 / 1289.0
-    print("made ratio")
     let appleIconView = AppleIconView(frame: CGRect.init(x: 0, y: 0, width: (appleRatio * 325.0 / 2208.0) * self.frame.height, height: (325.0 / 2208.0) * self.frame.height))
-    print("we init one")
-    
     appleIconView.addMask()
-    print("we add mask")
     appleIconView.backgroundColor = red
     appleIconView.frame = CGRect(x: self.center.x - (appleIconView.frame.width / 2.0), y: blueLine.frame.minY - ((137.0 / 2208.0) * self.frame.height), width: appleIconView.frame.width, height: appleIconView.frame.height)
-    print("we center and shit")
     appleIconView.alpha = 0
     self.addSubview(appleIconView)
-    
+
     UIView.animate(withDuration: 0.5, animations: {
       appleIconView.alpha = 1
     }, completion: nil)
@@ -102,23 +103,16 @@ open class WWDC2016Scene : UIView {
   func addWWDCLabel(){
     let labelSpacing : CGFloat = (130.0 / 2208.0) * self.frame.height
     let labelHeight : CGFloat = (67.0 / 2208.0) * self.frame.height
-    
     let WWDC2016Label = UILabel(frame: CGRect(x: 0, y: labelSpacing + greenLine.frame.maxY, width: self.frame.width, height: labelHeight))
-    
     let myString:NSString = "W W D C 1 6"
     var myMutableString = NSMutableAttributedString()
-    //(107.0 / 2208.0) * view.frame.height
     myMutableString = NSMutableAttributedString(string: myString as String, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: (67.0 / 2208.0) * self.frame.height, weight: UIFontWeightThin)])
-    
     myMutableString.addAttribute(NSForegroundColorAttributeName, value: green, range: NSRange(location:0,length:1))
     myMutableString.addAttribute(NSForegroundColorAttributeName, value: purple, range: NSRange(location:2,length:1))
     myMutableString.addAttribute(NSForegroundColorAttributeName, value: orange, range: NSRange(location:4,length:1))
     myMutableString.addAttribute(NSForegroundColorAttributeName, value: red, range: NSRange(location:6,length:1))
     myMutableString.addAttribute(NSForegroundColorAttributeName, value: blue, range: NSRange(location:8,length:3))
-    
-    
     WWDC2016Label.attributedText = myMutableString
-    
     WWDC2016Label.textAlignment = .center
     WWDC2016Label.alpha = 0
     self.addSubview(WWDC2016Label)
@@ -126,11 +120,6 @@ open class WWDC2016Scene : UIView {
       WWDC2016Label.alpha = 1
     }, completion: nil)
   }
-  
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
 }
 
 

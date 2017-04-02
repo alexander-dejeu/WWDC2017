@@ -5,13 +5,23 @@ public enum airPodStyle{
   case right
 }
 public class AirPod : UIView {
-  
+  //MARK: - Public Properties
   public var style : airPodStyle = .left {
     didSet {
       setNeedsDisplay()
     }
   }
   
+  
+  //MARK: - Lifecycle
+  override public func draw(_ rect: CGRect) {
+    switch style{
+    case .left: drawLeftAirPod()
+    case .right : drawRightAirPod()
+    }
+  }
+  
+  //MARK: - Helpers
   func drawLeftAirPod(){
     let strokeColor3 = UIColor(red: 0.005, green: 0.009, blue: 0.007, alpha: 1.000)
     let fillColor2 = UIColor(red: 0.005, green: 0.009, blue: 0.007, alpha: 1.000)
@@ -83,6 +93,7 @@ public class AirPod : UIView {
     bezier4Path.stroke()
     
   }
+  
   func drawRightAirPod(){
     let strokeColor3 = UIColor(red: 0.005, green: 0.009, blue: 0.007, alpha: 1.000)
     let fillColor2 = UIColor(red: 0.005, green: 0.009, blue: 0.007, alpha: 1.000)
@@ -152,13 +163,6 @@ public class AirPod : UIView {
     let ovalPath = UIBezierPath(ovalIn: CGRect(x: 80.3, y: 51.4, width: 16.9, height: 16.8))
     fillColor2.setFill()
     ovalPath.fill()
-  }
-  
-  override public func draw(_ rect: CGRect) {
-    switch style{
-    case .left: drawLeftAirPod()
-    case .right : drawRightAirPod()
-    }
   }
 }
 

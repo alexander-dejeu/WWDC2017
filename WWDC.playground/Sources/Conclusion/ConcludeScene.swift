@@ -1,39 +1,10 @@
 //: Playground - noun: a place where people can play
 
-
-// coolPhrase : [UILabel] -->
-// Look at each label - based on chars before you add the enxt word.
-
-// Going to have to add a shit load of dots
-// As you add them have them start random walking around :P
-
-// Make groups for the correctly colored dots
-
-// Go through the different groups and have them move to their final positions and stop random walking
-
-// when done? Throught the image in?
-
-// Then add the thank you text
-// Add the github link?
-
-
-//var dataBool : Bool? = true
-//var tokenBook : Bool? = true
-//
-//if let data = dataBool,  let token = tokenBook{
-//  print(data)
-//  print(token)
-//}
-
-// Create a dot with a speed and angle using arc tan
-// Then apply a sin func to change it?
-
-// X += Target * Rate
 import UIKit
 open class ConcludeScene : UIView{
-  
-  let dotAnimationSpeed : Double = 1.5
-  let imageOverlaySpeed : Double = 1.0
+  //MARK: - Properties
+  let dotAnimationSpeed : Double = 1.2
+  let imageOverlaySpeed : Double = 0.75
   var allDots : [UIView] = []
   var blueIndexs : [Int] = []
   var greenIndexs : [Int] = []
@@ -57,13 +28,11 @@ open class ConcludeScene : UIView{
   
   var possibleColors : [UIColor] = []
   
-  public func start(){
-    let displaylink = CADisplayLink(target: self,
-                                    selector: #selector(updateDots))
-    displaylink.add(to: .current,
-                    forMode: .defaultRunLoopMode)
-  }
+  var startDisplayLinkTime : Double = -1
+  var endTimeStamp : Double = 0
+  var viewsAddedCounter = 0
   
+  //MARK: - Lifecycle
   override public init(frame: CGRect) {
     super.init(frame: frame)
     possibleColors = [green, orange, yellow, red, blue, purple]
@@ -130,18 +99,25 @@ open class ConcludeScene : UIView{
       newDot.layer.cornerRadius = newDot.frame.width / 2.0
       
       allDots.append(newDot)
-      
     }
-    
-    
   }
   
-  var startDisplayLinkTime : Double = -1
-  var endTimeStamp : Double = 0
-  var viewsAddedCounter = 0
+  required public init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
+  
+  //MARK: - Public Helpers
+  public func start(){
+    let displaylink = CADisplayLink(target: self,
+                                    selector: #selector(updateDots))
+    displaylink.add(to: .current,
+                    forMode: .defaultRunLoopMode)
+  }
+  
+  
+  //MARK: - Helpers
   func updateDots(displaylink: CADisplayLink){
-    //    callUpdateDots(dots: allDots, delta: 1.0/60.0)
     if startDisplayLinkTime == -1{
       startDisplayLinkTime = displaylink.timestamp
       endTimeStamp = 6 + startDisplayLinkTime
@@ -155,8 +131,6 @@ open class ConcludeScene : UIView{
       animateBlue()
       
     }
-    
-    
     let totalViewCount : Double = 267
     // Add the right amount of views!
     let amountToShow = totalViewCount * percentToEnd
@@ -170,14 +144,8 @@ open class ConcludeScene : UIView{
     }
   }
   
-  
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
   func animateBlue(){
     // Blue Group 35 dots
-    print(blueIndexs.count)
     addHori(startingX: 172, startingY: 600, startingDotIndex: 0, count: 12, indexArray : blueIndexs)
     addHori(startingX: 183, startingY: 615, startingDotIndex: 12, count: 11, indexArray : blueIndexs)
     addHori(startingX: 200, startingY: 630, startingDotIndex: 23, count: 4, indexArray : blueIndexs)
@@ -195,7 +163,6 @@ open class ConcludeScene : UIView{
   }
   
   func animatePurple(){
-    print("animate purple")
     // PurpleGroup 42 Dots
     // TopLeft - 141, 546...15
     // MidLeft - 153, 564...14
@@ -208,7 +175,6 @@ open class ConcludeScene : UIView{
   }
   
   func animateRed(){
-    print("animate red")
     // RedGroup 44 Dots
     // TopLeft - 125, 493 ... 14
     // MidLeft - 129, 512 ... 15
@@ -221,7 +187,6 @@ open class ConcludeScene : UIView{
   }
   
   func animateOrange(){
-    print("animate Orange")
     // OrangeGroup 42
     // TopLeft - 121, 439 ... 14
     // MidLeft - 120, 458 ... 14
@@ -234,7 +199,6 @@ open class ConcludeScene : UIView{
   }
   
   func animateYellow(){
-    print("animate yellow")
     // YellowGroup 42
     // TopLeft - 135, 385 ... 14
     // MiddleLeft - 128, 404 ... 14
@@ -321,7 +285,6 @@ open class ConcludeScene : UIView{
           self.transitionFromDotsToImage(array: self.orangeIndexs, image: orangeStageImage, completionBlock: {
             self.transitionFromDotsToImage(array: self.yellowIndexs, image: yellowStageImage, completionBlock: {
               self.transitionFromDotsToImage(array: self.greenIndexs, image: greenStageImage, completionBlock: {
-                print("Add the label!")
                 self.addThankYouLabel()
               })
             })
@@ -386,10 +349,6 @@ open class ConcludeScene : UIView{
     // at the same time have the image view fade in
     
   }
-  
-  //  addHori(startingX: 172, startingY: 600, startingDotIndex: 0, count: 12, indexArray : blueIndexs)
-  //  addHori(startingX: 183, startingY: 615, startingDotIndex: 12, count: 11, indexArray : blueIndexs)
-  //  addHori(startingX: 200, startingY: 630, startingDotIndex: 23, count: 4, indexArray : blueIndexs)
   
   func addHori(startingX : CGFloat, startingY : CGFloat, startingDotIndex : Int, count : Int, indexArray : [Int], completionBlock: ((Bool) -> ())? = nil){
     for i in 0..<count{
