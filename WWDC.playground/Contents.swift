@@ -9,10 +9,17 @@ open class AYearAtApple : UIView {
   let night = NightSky(frame : CGRect(x: 0, y: 0, width: 599, height: 945))
   var airpodScene = AirPodScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   var concludeScene = ConcludeScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
+  var wwdcScene = WWDC2016Scene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   
   
   override public init(frame : CGRect){
     super.init(frame: frame)
+    wwdcScene.frame = CGRect(x: 0 - self.frame.width, y: 0, width: self.frame.width, height: self.frame.height)
+    wwdcScene.backgroundColor = #colorLiteral(red: 0.1560676694, green: 0.163968116, blue: 0.2117111683, alpha: 1)
+    self.addSubview(wwdcScene)
+    
+    
+    self.backgroundColor = .white
     appleWatchScene.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
     appleWatchScene.backgroundColor = #colorLiteral(red: 0.2862745098, green: 0.5647058824, blue: 0.8862745098, alpha: 1)
     appleWatchScene.alpha = 0
@@ -30,21 +37,38 @@ open class AYearAtApple : UIView {
     self.addSubview(concludeScene)
     
     
+    
     let displaylink = CADisplayLink(target: self,
                                     selector: #selector(step))
     displaylink.add(to: .current,
                     forMode: .defaultRunLoopMode)
-    watchTransition()
+    
   }
   
   var startDisplayLinkTime : Double = -1
   var endTimeStamp : Double = -1
   
+  var wwdc2016IntroStarted = false
+  var watchStarted = false
   var nightStarted = false
   var airpodsStarted = false
   var concludeStarted = false
   
   func step(displaylink: CADisplayLink) {
+    if !wwdc2016IntroStarted{
+      wwdc2016IntroStarted = true
+      print("are we crashing?")
+      wwdc2016Transtion()
+      print("yes")
+      
+    }
+    
+    if wwdcScene.done && !watchStarted{
+      
+      watchTransition()
+      watchStarted = true
+    }
+    
     if appleWatchScene.done && !nightStarted{
       nightStarted = true
       // Fade out the actual watch
@@ -99,12 +123,21 @@ open class AYearAtApple : UIView {
     
   }
   
+  func wwdc2016Transtion(){
+    UIView.animate(withDuration: 1.0, animations: {
+      self.wwdcScene.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+    }, completion: {boolean in
+      self.wwdcScene.start()
+      
+    })
+  }
+  
   required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   func iPhoneTransition(){
     UIView.animate(withDuration: 1.0, animations: {
-      self.appleWatchScene.alpha = 1
+      self.appleWatchScene.alpha = 0
     })
     UIView.animate(withDuration: 1.0, animations: {
       self.night.frame = CGRect(x: 0, y: 0, width: self.night.frame.width, height: self.night.frame.height)
@@ -116,6 +149,9 @@ open class AYearAtApple : UIView {
   func watchTransition(){
     UIView.animate(withDuration: 1.0, animations: {
       self.appleWatchScene.alpha = 1
+      self.wwdcScene.alpha = 0
+    }, completion : { boolean in
+      self.appleWatchScene.start()
     })
   }
   

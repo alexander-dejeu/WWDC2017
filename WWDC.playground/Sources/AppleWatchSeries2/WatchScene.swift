@@ -11,14 +11,14 @@ public class WatchScene : UIView, CAAnimationDelegate{
     }
   }
   
-  public func fadeOutWatch(){
-    UIView.animate(withDuration: 1.0, animations: {
-      self.watchView.alpha = 0
-    })
-  }
-  
-  override public init(frame: CGRect){
-    super.init(frame: frame)
+  public func start(){
+    watchView = customWatchView(frame: CGRect(x: 0, y: 0, width: 344.25, height: 633))
+    watchView.backgroundColor = .clear
+    watchView.center = self.center
+    watchView.alpha = 0
+    
+    self.addSubview(watchView)
+    
     let sunPath = UIBezierPath()
     sunPath.move(to: CGPoint(x: 1, y: 246))
     sunPath.addCurve(to: CGPoint(x: 300.5, y: 0.04), controlPoint1: CGPoint(x: 1, y: 246), controlPoint2: CGPoint(x: 152.7, y: -3.63))
@@ -40,6 +40,23 @@ public class WatchScene : UIView, CAAnimationDelegate{
     self.sunView.frame = CGRect(x: -1000, y: -1000, width: sunView.frame.width, height: sunView.frame.height)
     sunView.layer.add(anim, forKey: "animate position along path")
     self.addSubview(sunView)
+    
+    sunView.alpha = 0
+    
+    UIView.animate(withDuration: 0.5, animations: {
+      self.sunView.alpha = 1
+      self.watchView.alpha = 1
+    }, completion: nil)
+  }
+  
+  public func fadeOutWatch(){
+    UIView.animate(withDuration: 1.0, animations: {
+      self.watchView.alpha = 0
+    })
+  }
+  
+  override public init(frame: CGRect){
+    super.init(frame: frame)
   }
   
   required public init?(coder aDecoder: NSCoder) {
@@ -47,10 +64,7 @@ public class WatchScene : UIView, CAAnimationDelegate{
   }
   
   override public func draw(_ rect: CGRect){
-    watchView = customWatchView(frame: CGRect(x: 0, y: 0, width: 344.25, height: 633))
-    watchView.backgroundColor = .clear
-    watchView.center = self.center
-    self.addSubview(watchView)
+    
   }
 }
 
