@@ -16,6 +16,8 @@ public class animatedShape : UIView {
         self.createCircle()
       case .square:
         self.createSquare()
+//        self.createTimedSquare()
+        
       case .hexagon:
         self.createHexagon()
       }
@@ -23,6 +25,39 @@ public class animatedShape : UIView {
     
   }
   
+  func createTimedSquare(){
+    let displaylink = CADisplayLink(target: self,
+                                    selector: #selector(animateSquare))
+    displaylink.add(to: .current,
+                    forMode: .defaultRunLoopMode)
+  }
+  
+  var startDisplayLinkTime : Double = -1
+  var endTimeStamp : Double = 0
+  
+  var addSquareDot1 = false
+  var addSquareDot2 = false
+  var addSquareDot3 = false
+  var addSquareDot4 = false
+  
+  var drawSquareLines = false
+  
+  
+  func animateSquare(displaylink: CADisplayLink) {
+    if startDisplayLinkTime == -1{
+      startDisplayLinkTime = displaylink.timestamp
+      endTimeStamp = 6 + startDisplayLinkTime
+    }
+    
+    let curTimeStamp = displaylink.timestamp
+    
+    let percentToEnd = (curTimeStamp - startDisplayLinkTime) / (endTimeStamp - startDisplayLinkTime)
+    
+    if percentToEnd >= 1.0{
+      displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
+    }
+  }
+
   required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -77,7 +112,7 @@ public class animatedShape : UIView {
     
     for i in 0..<layers.count {
       layers[i].path = paths[i].cgPath
-      layers[i].strokeColor = UIColor.black.cgColor
+      layers[i].strokeColor = UIColor.white.cgColor
       layers[i].lineWidth = 2
       layers[i].fillColor = UIColor.clear.cgColor
       layers[i].lineCap = "round"
@@ -99,11 +134,11 @@ public class animatedShape : UIView {
     mask.apply(CGAffineTransform(scaleX: 3.0, y: 3.0))
     pathAnim.toValue = mask.cgPath;
     
-    let boundsAnim : CABasicAnimation = CABasicAnimation(keyPath: "bounds");
-    boundsAnim.toValue = NSValue(cgRect: newBounds);
+//    let boundsAnim : CABasicAnimation = CABasicAnimation(keyPath: "bounds");
+//    boundsAnim.toValue = NSValue(cgRect: newBounds);
     
     let anims: CAAnimationGroup = CAAnimationGroup();
-    anims.animations = [pathAnim, boundsAnim];
+    anims.animations = [pathAnim];
     anims.isRemovedOnCompletion = false;
     anims.duration = 2.0;
     anims.fillMode = kCAFillModeForwards;
@@ -136,7 +171,7 @@ public class animatedShape : UIView {
       let newLayer = CAShapeLayer()
       //      self.layer.addSublayer(newLayer)
       
-      newLayer.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+      newLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
       
       newLayer.backgroundColor = UIColor.white.cgColor
       newLayer.borderWidth = 1
@@ -145,11 +180,14 @@ public class animatedShape : UIView {
       newLayer.mask = mask
       
       
+      
+      
       self.addSubview(newView)
       
       UIView.animate(withDuration: 2.0, animations: {
-        newView.bounds.size = CGSize(width : self.bounds.size.width * 2.0, height: self.bounds.size.height * 2.0)
-        newView.alpha = 0.0
+//        newView.bounds.size = CGSize(width : self.bounds.size.width * 2.0, height: self.bounds.size.height * 2.0)
+        newView.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
+        newView.alpha = 0
         //        if shape == .circle{
         //          newView.layer.cornerRadius = min(newView.bounds.size.width / 2.0, newView.bounds.size.height / 2.0)
         //        }
@@ -161,7 +199,7 @@ public class animatedShape : UIView {
   
   func createCircle(){
     let cirPath1 = UIBezierPath()
-    cirPath1.addArc(withCenter: CGPoint(x: self.center.x, y: self.center.y - 100), radius: 100, startAngle:CGFloat(M_PI) / -2, endAngle: CGFloat(M_PI) * 2 - (CGFloat(M_PI) / 2), clockwise: true)
+    cirPath1.addArc(withCenter: CGPoint(x: self.center.x - 150, y: self.center.y - 300), radius: 150, startAngle:CGFloat(M_PI) / -2, endAngle: CGFloat(M_PI) * 2 - (CGFloat(M_PI) / 2), clockwise: true)
     
     let cirDot1 = makeDot(width: 5, height: 5)
     
@@ -178,7 +216,7 @@ public class animatedShape : UIView {
   }
   
   func createSquare(){
-    let recPoints = getPolyPoints(sides: 4, radius: 100, rotation: 0.25 * M_PI)
+    let recPoints = getPolyPoints(sides: 4, radius: 150, rotation: 0.25 * M_PI)
     
     let rectPath1 = createBezierPath(startingPoint: recPoints[0], lineSegPoints: [recPoints[1]])
     let rectPath2 = createBezierPath(startingPoint: recPoints[1], lineSegPoints: [recPoints[2]])
@@ -199,6 +237,7 @@ public class animatedShape : UIView {
     let recLine2 = CAShapeLayer()
     let recLine3 = CAShapeLayer()
     let recLine4 = CAShapeLayer()
+
     
     self.layer.addSublayers(sublayers: [recLine1, recLine2, recLine3, recLine4])
     
@@ -212,7 +251,7 @@ public class animatedShape : UIView {
   
   func createHexagon(){
     // Get the six points
-    let hexPoints = getPolyPoints(sides: 6, radius: 100, rotation: 0.5 * M_PI)
+    let hexPoints = getPolyPoints(sides: 6, radius: 150, rotation: 0.5 * M_PI)
     
     let hexPath1 = createBezierPath(startingPoint: hexPoints[0], lineSegPoints: [hexPoints[1], hexPoints[2]])
     let hexPath2 = createBezierPath(startingPoint: hexPoints[2], lineSegPoints: [hexPoints[3], hexPoints[4]])
