@@ -2,6 +2,8 @@
 
 import UIKit
 import PlaygroundSupport
+import AVFoundation
+
 
 open class AYearAtApple : UIView {
   
@@ -11,9 +13,21 @@ open class AYearAtApple : UIView {
   var concludeScene = ConcludeScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   var wwdcScene = WWDC2016Scene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   var introScene = IntroScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
-  
+  var audioPlayer = AVAudioPlayer()
   
   override public init(frame : CGRect){
+    // Awesome Music is under Create Commons Attribution 4.0 International Licencse
+    // 🎶🔊 Music was created by Ross Bugden!  Check out the original source here:
+    // https://www.youtube.com/watch?v=BY0U432m8W0 🎧
+    let soundURL = Bundle.main.url(forResource: "InspirationalPiano", withExtension: "mp3")
+    
+    do {
+      try audioPlayer = AVAudioPlayer(contentsOf: soundURL!)
+    }
+    catch{
+      print("Huston we have a problem!")
+    }
+    audioPlayer.play()
     super.init(frame: frame)
     self.backgroundColor = .black
     introScene.alpha = 0
@@ -179,19 +193,16 @@ open class AYearAtApple : UIView {
 let w : CGFloat = 599
 let h : CGFloat = 945
 
+//if let soundURL = Bundle.main.url(forResource: "InspirationalPiano", withExtension: "mp3") {
+//  print("Do you get called?")
+//  var mySound: SystemSoundID = 0
+//  AudioServicesCreateSystemSoundID(soundURL as CFURL, &mySound)
+//  // Play
+//  AudioServicesPlaySystemSound(mySound)
+//}
+
 let view = AYearAtApple(frame: CGRect(x: 0, y: 0, width: w, height: h))
 PlaygroundPage.current.liveView = view
+PlaygroundPage.current.needsIndefiniteExecution = true
 
 
-
-
-//var jetBlackiPhoneScene = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
-//
-//
-
-//PlaygroundPage.current.liveView = airpodScene
-
-
-//let leftAirPod : AirPod = AirPod(frame: CGRect(x: 0, y: 0, width: 164, height: 360))
-//leftAirPod.backgroundColor = .white
-//view.addSubview(leftAirPod)
