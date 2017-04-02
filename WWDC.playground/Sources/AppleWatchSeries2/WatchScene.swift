@@ -17,6 +17,13 @@ public class WatchScene : UIView, CAAnimationDelegate{
     watchView.center = self.center
     watchView.alpha = 0
     
+    var watchTitle : coolUILabel = coolUILabel(frame: CGRect(x: 0, y: 764, width: self.frame.width, height: 200), text: "apple watch\nseries 2")
+    watchTitle.alpha = 0
+    watchTitle.textColor = .white
+    watchTitle.numberOfLines = 2
+    watchTitle.textAlignment = .center
+    self.addSubview(watchTitle)
+    
     self.addSubview(watchView)
     
     let sunPath = UIBezierPath()
@@ -46,7 +53,12 @@ public class WatchScene : UIView, CAAnimationDelegate{
     UIView.animate(withDuration: 0.5, animations: {
       self.sunView.alpha = 1
       self.watchView.alpha = 1
-    }, completion: nil)
+    }, completion: { boolean in
+      UIView.animate(withDuration: 1.0, animations: {
+        watchTitle.alpha = 1
+      })
+    })
+    
   }
   
   public func fadeOutWatch(){

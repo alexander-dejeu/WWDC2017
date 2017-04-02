@@ -96,7 +96,7 @@ open class NightSky : UIView {
   func step(displaylink: CADisplayLink) {
     if startDisplayLinkTime == -1{
       startDisplayLinkTime = displaylink.timestamp
-      endTimeStamp = 12 + startDisplayLinkTime
+      endTimeStamp = 7 + startDisplayLinkTime
     }
     let curTimeStamp = displaylink.timestamp
     
@@ -155,13 +155,28 @@ open class NightSky : UIView {
     let allXPoints : [CGFloat] = xPointsTL + xPointsTR + xPointsBR + xPointsBL
     let allYPoints : [CGFloat] = yPointsTL + yPointsTR + yPointsBR + yPointsBL
     
+    let jetBlackLabel : coolUILabel = coolUILabel(frame: CGRect(x : 43.5, y: 826, width: self.frame.width, height: 72), text: "jet black iPhone 7")
+    
+    jetBlackLabel.textColor = .white
+    jetBlackLabel.alpha = 0
+    self.addSubview(jetBlackLabel)
+    jetBlackLabel.frame = CGRect(x: 43.5, y: 826 + 100, width: jetBlackLabel.frame.width, height: jetBlackLabel.frame.height)
+    
+    
+    
+    
     for i in startingDotIndex..<startingDotIndex+count{
       let curX = allXPoints[i - startingDotIndex] * self.frame.width
       let curY = allYPoints[i - startingDotIndex] * self.frame.height
       
       UIView.animate(withDuration: 2.5, delay: 0.3, options: [.curveEaseOut], animations: {
         self.dotArray[i].frame = CGRect(x: curX, y: curY, width: 3.75, height: 3.75)
-      }, completion: setDoneFlag)
+      }, completion: { boolean in
+        UIView.animate(withDuration: 1.0, animations: {
+          jetBlackLabel.frame = CGRect(x: 43.5, y: 826, width: jetBlackLabel.frame.width, height: jetBlackLabel.frame.height)
+          jetBlackLabel.alpha = 1
+        }, completion: self.setDoneFlag)
+      })
     }
     
   }

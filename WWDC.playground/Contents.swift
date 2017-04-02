@@ -16,7 +16,7 @@ open class AYearAtApple : UIView {
   var audioPlayer = AVAudioPlayer()
   
   override public init(frame : CGRect){
-    // Awesome Music is under Create Commons Attribution 4.0 International Licencse
+    // The awesome music you are hearing  is under Create Commons Attribution 4.0 International Licencse
     // 🎶🔊 Music was created by Ross Bugden!  Check out the original source here:
     // https://www.youtube.com/watch?v=BY0U432m8W0 🎧
     let soundURL = Bundle.main.url(forResource: "InspirationalPiano", withExtension: "mp3")

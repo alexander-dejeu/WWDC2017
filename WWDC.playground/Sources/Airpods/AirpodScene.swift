@@ -46,7 +46,7 @@ open class AirPodScene : UIView {
     miniSun.alpha = 0
     
     self.addSubview(miniSun)
-    UIView.animate(withDuration: 1.0, animations: {
+    UIView.animate(withDuration: 1.0, delay : 1.0, animations: {
       self.miniSun.alpha = 1.0
     }, completion: { boolean in
       UIView.animate(withDuration: 3.0, animations: {
@@ -257,7 +257,15 @@ open class AirPodScene : UIView {
       self.addSubview(detailLeftPod)
       self.addSubview(detailRightPod)
       
+      let airpodLabel : coolUILabel = coolUILabel(frame: CGRect(x: 0, y: 27, width: self.frame.width, height: 72), text: "airpods")
+      airpodLabel.alpha = 0
+      airpodLabel.textAlignment = .center
+      self.addSubview(airpodLabel)
       
+      UIView.animate(withDuration: 1.5, delay: 0.5, animations: {
+        airpodLabel.alpha = 1
+      })
+
       UIView.animate(withDuration: 2.0, animations: {
         
         detailLeftPod.alpha = 1
