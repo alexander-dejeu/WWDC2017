@@ -8,8 +8,10 @@ public enum TypeOfShape {
 
 public class animatedShape : UIView {
   
-  public init(shape : TypeOfShape, frame : CGRect, delay : Double){
+  var rotation : Double = 0
+  public init(shape : TypeOfShape, frame : CGRect, delay : Double, shapeRotation : Double){
     super.init(frame: frame)
+    self.rotation = shapeRotation
     DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
       switch shape{
       case .circle:
@@ -156,42 +158,80 @@ public class animatedShape : UIView {
         subLayer.removeFromSuperlayer()
       }
       
-      let newView = UIView()
-      
-      newView.frame = viewPath.bounds
-      newView.layer.borderWidth = 1
-      newView.layer.borderColor = UIColor.white.cgColor
-      newView.clipsToBounds = true
-      
-      
-      if shape == .circle{
-        newView.layer.cornerRadius = newView.frame.width / 2.0
+      if shape == .square || shape == .circle{
+        let newView = UIView()
+        
+        newView.frame = viewPath.bounds
+        newView.layer.borderWidth = 1
+        newView.layer.borderColor = UIColor.white.cgColor
+        newView.clipsToBounds = true
+        
+        
+        if shape == .circle{
+          newView.layer.cornerRadius = newView.frame.width / 2.0
+        }
+        
+        let newLayer = CAShapeLayer()
+        //      self.layer.addSublayer(newLayer)
+        
+        newLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        
+        newLayer.backgroundColor = UIColor.white.cgColor
+        newLayer.borderWidth = 1
+        let mask = CAShapeLayer()
+        mask.path = viewPath.cgPath
+        newLayer.mask = mask
+        
+        
+        
+        
+        self.addSubview(newView)
+        
+        UIView.animate(withDuration: 2.0, animations: {
+          //        newView.bounds.size = CGSize(width : self.bounds.size.width * 2.0, height: self.bounds.size.height * 2.0)
+          newView.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
+          newView.alpha = 0
+          //        if shape == .circle{
+          //          newView.layer.cornerRadius = min(newView.bounds.size.width / 2.0, newView.bounds.size.height / 2.0)
+          //        }
+        })
       }
       
-      let newLayer = CAShapeLayer()
-      //      self.layer.addSublayer(newLayer)
-      
-      newLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-      
-      newLayer.backgroundColor = UIColor.white.cgColor
-      newLayer.borderWidth = 1
-      let mask = CAShapeLayer()
-      mask.path = viewPath.cgPath
-      newLayer.mask = mask
-      
-      
-      
-      
-      self.addSubview(newView)
-      
-      UIView.animate(withDuration: 2.0, animations: {
-//        newView.bounds.size = CGSize(width : self.bounds.size.width * 2.0, height: self.bounds.size.height * 2.0)
-        newView.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
-        newView.alpha = 0
-        //        if shape == .circle{
-        //          newView.layer.cornerRadius = min(newView.bounds.size.width / 2.0, newView.bounds.size.height / 2.0)
-        //        }
-      })
+      if shape == .hexagon{
+        let whiteView = UIView(frame: CGRect(x: 2.5, y: 2.5, width: 300, height: 300))
+        let maskLayer = CAShapeLayer()
+        
+        maskLayer.path = viewPath.cgPath
+        // Fill rule set to exclude intersected paths
+        maskLayer.fillRule = kCAFillRuleEvenOdd
+        whiteView.layer.mask = maskLayer
+        whiteView.clipsToBounds = true
+        whiteView.backgroundColor = .white
+        
+        self.addSubview(whiteView)
+        
+        let innerWhiteView = UIView(frame: CGRect(x: 1, y: 1, width: 298, height: 298))
+        let innerMaskLayer = CAShapeLayer()
+        
+        innerMaskLayer.path = viewPath.cgPath
+        // Fill rule set to exclude intersected paths
+        innerMaskLayer.fillRule = kCAFillRuleEvenOdd
+        innerWhiteView.layer.mask = innerMaskLayer
+        innerWhiteView.clipsToBounds = true
+        innerWhiteView.backgroundColor = #colorLiteral(red: 0.1560676694, green: 0.163968116, blue: 0.2117111683, alpha: 1)
+        //        innerWhiteView.center = whiteView.center
+        
+        whiteView.addSubview(innerWhiteView)
+        
+        
+        UIView.animate(withDuration: 2.0, animations: {
+          whiteView.transform = CGAffineTransform(scaleX: 4.0, y: 4.0)
+          //          innerWhiteView.transform = CGAffineTransform(scaleX: 4.0677966102, y: 4.0677966102)
+          whiteView.alpha = 0
+          //          innerWhiteView.alpha = 0
+        })
+
+      }
       
     })
   }
@@ -216,7 +256,7 @@ public class animatedShape : UIView {
   }
   
   func createSquare(){
-    let recPoints = getPolyPoints(sides: 4, radius: 150, rotation: 0.25 * M_PI)
+    let recPoints = getPolyPoints(sides: 4, radius: 150, rotation: (0.25 * M_PI) + self.rotation)
     
     let rectPath1 = createBezierPath(startingPoint: recPoints[0], lineSegPoints: [recPoints[1]])
     let rectPath2 = createBezierPath(startingPoint: recPoints[1], lineSegPoints: [recPoints[2]])
@@ -251,7 +291,7 @@ public class animatedShape : UIView {
   
   func createHexagon(){
     // Get the six points
-    let hexPoints = getPolyPoints(sides: 6, radius: 150, rotation: 0.5 * M_PI)
+    let hexPoints = getPolyPoints(sides: 6, radius: 150, rotation: (0.5 * M_PI) + self.rotation)
     
     let hexPath1 = createBezierPath(startingPoint: hexPoints[0], lineSegPoints: [hexPoints[1], hexPoints[2]])
     let hexPath2 = createBezierPath(startingPoint: hexPoints[2], lineSegPoints: [hexPoints[3], hexPoints[4]])
@@ -275,7 +315,7 @@ public class animatedShape : UIView {
     
     animateLinePath(layers: [hexLine1, hexLine2, hexLine3], paths: [hexPath1, hexPath2, hexPath3])
     
-    addExitFade(viewPath: createBezierPath(startingPoint: hexPoints[0], lineSegPoints: [hexPoints[1], hexPoints[2], hexPoints[3], hexPoints[4], hexPoints[5], hexPoints[0]]))
+    addExitFade(viewPath: createBezierPath(startingPoint: hexPoints[0], lineSegPoints: [hexPoints[1], hexPoints[2], hexPoints[3], hexPoints[4], hexPoints[5], hexPoints[0]]), shape : .hexagon)
   }
   // Helpers
   func makeDot(width : Double, height : Double) -> UIView{

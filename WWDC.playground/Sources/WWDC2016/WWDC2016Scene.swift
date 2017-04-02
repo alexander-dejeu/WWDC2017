@@ -105,7 +105,7 @@ open class WWDC2016Scene : UIView {
     
     let WWDC2016Label = UILabel(frame: CGRect(x: 0, y: labelSpacing + greenLine.frame.maxY, width: self.frame.width, height: labelHeight))
     
-    var myString:NSString = "W W D C 1 6"
+    let myString:NSString = "W W D C 1 6"
     var myMutableString = NSMutableAttributedString()
     //(107.0 / 2208.0) * view.frame.height
     myMutableString = NSMutableAttributedString(string: myString as String, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: (67.0 / 2208.0) * self.frame.height, weight: UIFontWeightThin)])
