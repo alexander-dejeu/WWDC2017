@@ -61,7 +61,7 @@ open class AirPodScene : UIView {
   func start(){
     self.backgroundColor = #colorLiteral(red: 0.9568627451, green: 0.7529411765, blue: 0.2588235294, alpha: 1)
     miniSun.removeFromSuperview()
-    print("start animation")
+    
     let displaylink = CADisplayLink(target: self,
                                     selector: #selector(animateClouds))
     displaylink.add(to: .current,
@@ -171,7 +171,7 @@ open class AirPodScene : UIView {
     
     if percentToEnd >= 0.0 && stageOneFlag == -1{
       stageOneFlag = 1
-      print("animate stage one!")
+      
       for i in 0..<group1L.count{
         group1L[i].moveCloudAnimation(from: .left, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group1L.count)) * Double(i))
       }
@@ -182,7 +182,7 @@ open class AirPodScene : UIView {
     }
     if percentToEnd >= 0.333333 && stageTwoFlag == -1{
       stageTwoFlag = 1
-      print("animate stage two!")
+      
       for i in 0..<group2L.count{
         group2L[i].moveCloudAnimation(from: .left, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group2L.count)) * Double(i))
       }
@@ -193,7 +193,7 @@ open class AirPodScene : UIView {
     }
     if percentToEnd >= 0.666666 && stageThreeFlag == -1{
       stageThreeFlag = 1
-      print("Animate stage three!")
+      
       for i in 0..<group3L.count{
         group3L[i].moveCloudAnimation(from: .left, shift: self.frame.width, delay: (8.0 / 3.0 / Double(group3L.count)) * Double(i))
 
@@ -217,20 +217,20 @@ open class AirPodScene : UIView {
     
     if firstRun == -1{
       firstRun = 0
-      print("Dop we asdo")
+      
       startDisplayLinkTime = displaylink.timestamp
       endTimeStamp = 9 + startDisplayLinkTime
     }
     let curTimeStamp = displaylink.timestamp
     
     let percentToEnd = (curTimeStamp - startDisplayLinkTime) / (endTimeStamp - startDisplayLinkTime)
-    print(percentToEnd)
+    
     if percentToEnd >= 1.0{
       displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
     }
     
     if percentToEnd >= 0.0 && moveAndRotateAirpodsFlag == -1 {
-      print("1")
+      
       moveAndRotateAirpodsFlag = 1
       let allClouds = [smallCloud, doubleCloud, singleCenterCloud, singleLeftCloud, bigFillCloud, fatLeftLongCloud, filledSmallRightCloud, tripleBumpCloud, largestCloud, longRightCloud]
       
@@ -241,7 +241,7 @@ open class AirPodScene : UIView {
     }
     
     if percentToEnd >= 0.3333333 && transformToDetailAirPodFlag == -1{
-      print("2")
+      
       transformToDetailAirPodFlag = 1
       detailLeftPod = AirPod(frame: CGRect(x: leftAirpodRotatedX, y: leftAirpodRotatedY, width: leftAirPodCloud.frame.width, height: leftAirPodCloud.frame.height))
       detailLeftPod.style = .left
@@ -257,31 +257,25 @@ open class AirPodScene : UIView {
       self.addSubview(detailLeftPod)
       self.addSubview(detailRightPod)
       
-      print("3")
+      
       UIView.animate(withDuration: 2.0, animations: {
-        print("yaeh?")
+        
         detailLeftPod.alpha = 1
         detailRightPod.alpha = 1
         self.leftAirPodCloud.alpha = 0
         self.rightAirPodCloud.alpha = 0
       })
-      print("WR")
-      //      detailRightPod.alpha = 1.0
-      //      detailRightPod.backgroundColor = .green
-      print("WR")
+      
       UIView.animate(withDuration: 3.0, delay: 2.0,animations: {
         detailLeftPod.frame = CGRect(x: self.leftAirpodFinalX, y: self.leftAirpodFinalY, width: detailLeftPod.frame.width, height: detailLeftPod.frame.height)
         detailRightPod.frame = CGRect(x: self.rightAirpodFinalX, y: self.rightAirpodFinalY, width: detailRightPod.frame.width, height: detailRightPod.frame.height)
+      }, completion: { boolean in
+        self.done = true
+        displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
+        
       })
-      print("ya")
       moveToFinalLocationFlag = 1
     }
-    
-    if percentToEnd >= 0.6666666 && moveToFinalLocationFlag == -1{
-      
-    }
-    // Start fading the clouds at stage one!
-    
   }
   
   func animateAirPodsToCenter(){
@@ -290,11 +284,8 @@ open class AirPodScene : UIView {
       self.leftAirPodCloud.frame = CGRect(x: self.leftAirpodRotatedX, y: self.leftAirpodRotatedY, width: self.leftAirPodCloud.frame.width, height: self.leftAirPodCloud.frame.height)
       
       
-      print(self.leftAirPodCloud.frame)
       self.rightAirPodCloud.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
       self.rightAirPodCloud.frame = CGRect(x: self.rightAirpodRotatedX, y: self.rightAirpodRotatedY, width: self.rightAirPodCloud.frame.width, height: self.rightAirPodCloud.frame.height)
-      
-      print(self.rightAirPodCloud.frame)
     })
   }
   func sendCloudsToStartingPosition(){

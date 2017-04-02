@@ -32,8 +32,8 @@
 import UIKit
 open class ConcludeScene : UIView{
   
-  let dotAnimationSpeed : Double = 2.0
-  let imageOverlaySpeed : Double = 1.5
+  let dotAnimationSpeed : Double = 1.5
+  let imageOverlaySpeed : Double = 1.0
   var allDots : [UIView] = []
   var blueIndexs : [Int] = []
   var greenIndexs : [Int] = []
@@ -360,22 +360,23 @@ open class ConcludeScene : UIView{
       thankYou.alpha = 1
     }, completion: nil)
   }
+  
   func transitionFromDotsToImage(array: [Int], image : UIImageView, completionBlock: (() -> ())? = nil){
-    UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+    UIView.animate(withDuration: imageOverlaySpeed, delay: 0.0, options: [.curveEaseOut], animations: {
       image.alpha = 1
       
     }, completion: nil)
     
     for i in 0..<array.count {
       if i == array.count - 1{
-        UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: imageOverlaySpeed, delay: 0.0, options: [.curveEaseOut], animations: {
           self.allDots[array[i]].alpha = 0
         }, completion: { boolean in
           completionBlock!()
         })
       }
       else{
-        UIView.animate(withDuration: imageOverlaySpeed, delay: 0.3, options: [.curveEaseOut], animations: {
+        UIView.animate(withDuration: imageOverlaySpeed, delay: 0.0, options: [.curveEaseOut], animations: {
           self.allDots[array[i]].alpha = 0
           
         }, completion: nil)
