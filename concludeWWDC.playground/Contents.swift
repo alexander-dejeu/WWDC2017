@@ -250,7 +250,7 @@ class concludeScene : UIView{
 //    callUpdateDots(dots: allDots, delta: 1.0/60.0)
     if startDisplayLinkTime == -1{
       startDisplayLinkTime = displaylink.timestamp
-      endTimeStamp = 12 + startDisplayLinkTime
+      endTimeStamp = 6 + startDisplayLinkTime
     }
     let curTimeStamp = displaylink.timestamp
     
