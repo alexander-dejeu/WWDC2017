@@ -10,10 +10,15 @@ open class AYearAtApple : UIView {
   var airpodScene = AirPodScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   var concludeScene = ConcludeScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   var wwdcScene = WWDC2016Scene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
+  var introScene = IntroScene(frame: CGRect(x: 0, y: 0, width: 599, height: 945))
   
   
   override public init(frame : CGRect){
     super.init(frame: frame)
+    self.backgroundColor = .black
+    introScene.alpha = 0
+    self.addSubview(introScene)
+    
     wwdcScene.frame = CGRect(x: 0 - self.frame.width, y: 0, width: self.frame.width, height: self.frame.height)
     wwdcScene.backgroundColor = #colorLiteral(red: 0.1560676694, green: 0.163968116, blue: 0.2117111683, alpha: 1)
     self.addSubview(wwdcScene)
@@ -48,6 +53,7 @@ open class AYearAtApple : UIView {
   var startDisplayLinkTime : Double = -1
   var endTimeStamp : Double = -1
   
+  var introStarted = false
   var wwdc2016IntroStarted = false
   var watchStarted = false
   var nightStarted = false
@@ -55,7 +61,12 @@ open class AYearAtApple : UIView {
   var concludeStarted = false
   
   func step(displaylink: CADisplayLink) {
-    if !wwdc2016IntroStarted{
+    if !introStarted{
+      introStarted = true
+      introTransition()
+    }
+    
+    if introScene.done && !wwdc2016IntroStarted{
       wwdc2016IntroStarted = true
       print("are we crashing?")
       wwdc2016Transtion()
@@ -109,6 +120,15 @@ open class AYearAtApple : UIView {
 //      displaylink.remove(from: .current, forMode: .defaultRunLoopMode)
 //    }
     
+  }
+  
+  func introTransition(){
+    UIView.animate(withDuration: 1.0, animations: {
+      self.introScene.alpha = 1
+    }, completion: {boolean in
+      self.introScene.start()
+      
+    })
   }
   
   func concludeTransition(){

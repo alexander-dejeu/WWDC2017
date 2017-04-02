@@ -1,9 +1,12 @@
 import UIKit
 
-open class introScene : UIView{
+open class IntroScene : UIView{
+  
+  public var done = false
+  
   public override init(frame: CGRect){
     super.init(frame: frame)
-    
+    self.backgroundColor = .white
   }
   
   required public init?(coder aDecoder: NSCoder) {
@@ -88,7 +91,7 @@ open class introScene : UIView{
                           self.animateGroup(group: groupTwelve, closure: {
                             self.animateGroup(group: groupThirteen, closure: {
                               self.animateGroup(group: groupFourteen, closure: {
-                                return ()
+                                self.done = true
                               })
                             })
                           })
@@ -107,22 +110,25 @@ open class introScene : UIView{
   }
   
   func animateGroup(group : [coolUILabel], closure : @escaping ()->()?){
+    var delayBuildup = 0.0
+    
     for i in 0..<group.count{
       if group.count == 1 {
         group[0].alpha = 0
         self.addSubview(group[0])
-        group[i].sizeToFit()
+        group[0].sizeToFit()
         var str = group[i].text!
-        UIView.animate(withDuration: Double(str.characters.count) * 0.1, animations: {
-          group[i].textColor = .white
-          group[i].alpha = 1
+        UIView.animate(withDuration: 0.7, animations: {
+          group[0].textColor = .black
+          group[0].alpha = 1
         }, completion : { boolean in
-          UIView.animate(withDuration: 0.5, animations: {
+          UIView.animate(withDuration: 0.5, delay : 0.5, animations: {
             group[0].alpha = 0
           }, completion : { boolean in
             closure()
           })
         })
+        return 
       }
       group[i].alpha = 0
       self.addSubview(group[i])
@@ -130,7 +136,7 @@ open class introScene : UIView{
         group[i].sizeToFit()
         var str = group[i].text!
         UIView.animate(withDuration: Double(str.characters.count) * 0.1, animations: {
-          group[i].textColor = .white
+          group[i].textColor = .black
           group[i].alpha = 1
         })
       }
@@ -142,8 +148,10 @@ open class introScene : UIView{
           self.addSubview(group[i])
           var str = group[i].text!
           var prvStr = group[i-1].text!
-          UIView.animate(withDuration: Double(str.characters.count) * 0.1, delay: Double(prvStr.characters.count) * 0.15, animations: {
-            group[i].textColor = .white
+          let delay : Double = max(0.35,(Double(prvStr.characters.count) * 0.15))
+          delayBuildup += delay
+          UIView.animate(withDuration: Double(str.characters.count) * 0.1, delay: delayBuildup, animations: {
+            group[i].textColor = .black
             group[i].alpha = 1
           }, completion : { boolean in
             for a in 0..<group.count{
@@ -170,8 +178,10 @@ open class introScene : UIView{
           self.addSubview(group[i])
           var str = group[i].text!
           var prvStr = group[i-1].text!
-          UIView.animate(withDuration: Double(str.characters.count) * 0.1, delay: Double(prvStr.characters.count) * 0.15, animations: {
-            group[i].textColor = .white
+          let delay : Double = max(0.35,(Double(prvStr.characters.count) * 0.15))
+          delayBuildup += delay
+          UIView.animate(withDuration: Double(str.characters.count) * 0.1, delay: delayBuildup, animations: {
+            group[i].textColor = .black
             group[i].alpha = 1
           })
         }
